@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import axiosInstance from '../../axios/axios'
 import { searchCreators } from '../../store/actions'
+import loadingSVG from '../../assets/images/loading.svg'
 // JSX
 import { 
   Wrapper,
@@ -16,7 +17,7 @@ import {
 import Result from '../../components/UI/Result/Result'
 import ReactPaginate from 'react-paginate'
 import { Icon } from 'react-svg-library'
-import Divider from '../../components/UI/Divider/Divider'
+// import Divider from '../../components/UI/Divider/Divider'
 
 /**
  * Axios cancel token to cancel pending searches if user changes pages too fast.
@@ -25,12 +26,19 @@ const CancelToken = axios.CancelToken
 let cancel
 
 const app = (props) => {
+  /**
+   * To scroll up after evey search.
+   */
+  const myContainer = React.useRef(null)
+
   const [paginationData, setPaginationData] = React.useState()
   const [isLoading, setIsLoading] = React.useState(true)
+  const [areResultsLoading, setResultsLoading] = React.useState(true)
 
   const paginationDataHandler = (data) => {
     setPaginationData({ ...data })
     setIsLoading(false)
+    setResultsLoading(false)
   }
 
   React.useEffect(() => {
@@ -40,16 +48,32 @@ const app = (props) => {
     }
   }, [props.data])
 
+  const scrollToTop = () => {
+    if (myContainer && myContainer.current) {
+      console.log('myContainer', myContainer)
+      const currentScrollPosition = window.pageYOffset
+      const desiredScrollPosition = myContainer.current.offsetTop - 56
+      if (currentScrollPosition > desiredScrollPosition) {
+        window.scroll({
+          top: desiredScrollPosition, // -64 to account for the margin and padding on top.
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
+    }
+  }
+
   const onPageChangeHandler = async (pageObjectData) => {
-      const selectedPage = pageObjectData.selected + 1
-      console.log('selectedPage', selectedPage)
-      /**
-     * If `cancel` exists, it means there is a promise pending. It is best to cancel it
-     * to reduce the amount of unnecessary requests.
-     */
+    const selectedPage = pageObjectData.selected + 1
+    console.log('selectedPage', selectedPage)
+    /**
+   * If `cancel` exists, it means there is a promise pending. It is best to cancel it
+   * to reduce the amount of unnecessary requests.
+   */
     cancel && cancel('New search done by the user.')
     if (paginationData) {
-      await setIsLoading(true)
+      await setResultsLoading(true)
+      await scrollToTop()
       const response = await axiosInstance.get('', {
         params: {
           ...props.searchParams,
@@ -61,8 +85,7 @@ const app = (props) => {
         })
       })
       await props.updateSearch && props.updateSearch(response.data)
-      await setIsLoading(false)
-      
+      await setResultsLoading(false)
     }
   }
 
@@ -78,12 +101,28 @@ const app = (props) => {
 
   const searchResults = props.data && props.data.results && setResults(props.data.results)
 
+  const placeholderResults = React.useMemo(() => {
+    console.log('placeholderResults')
+    const emptyArray = Array.from(new Array(16))
+    return emptyArray.map((_, index) => {
+      return (
+        <Result
+          key={index}
+          placeholder={loadingSVG}
+          cover_image={loadingSVG}
+          thumb={loadingSVG}
+          />
+      )
+    })
+  }, [])
+
+  console.log('areResultsLoading', areResultsLoading)
+
   return (
     <Wrapper>
       {props.searchQuery && (
         <>
-          <Title>Search results for: {props.searchQuery}</Title>  
-          <Divider height='32px' />
+          <Title>Search results for: <span>{props.searchQuery}</span></Title>  
           <ReactPaginate
             pageCount={paginationData && paginationData.pages}
             marginPagesDisplayed={2}
@@ -98,7 +137,7 @@ const app = (props) => {
             activeClassName={'active'} />
         </>
       )}
-      <Container>
+      <Container ref={myContainer}>
         {isLoading ? (
           <Loading>
             <Icon
@@ -112,9 +151,16 @@ const app = (props) => {
               icon='loading-one' />
           </Loading>
         ) : (
-          <Results>
-            {searchResults}
-          </Results>
+          areResultsLoading ?
+          (
+            <Results>
+              {placeholderResults}
+            </Results>
+          ) : (
+            <Results>
+              {searchResults}
+            </Results>
+          )
         )}
       </Container>
     </Wrapper>

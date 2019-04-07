@@ -16,15 +16,13 @@ export const Wrapper = styled.section`
   .pagination {
     z-index: 2;
     position: sticky;
-    top: 12px;
+    top: 0px;
     display: flex;
     padding: 12px 9px;
-    max-width: 620px;
-    box-shadow: -2px 3px 6px rgba(0,0,0,.16), 2px 4px 6px rgba(0,0,0,.53);
+    box-shadow: -1px 2px 3px rgba(0,0,0,.16), 1px 2px 3px rgba(0,0,0,.53);
     margin: 0 auto;
     background-color: #8DC3F4;
     color: #FFF;
-    border-radius: 4px;
     width: 100%;
     justify-content: space-between;
     align-items: center;
@@ -67,7 +65,15 @@ export const Wrapper = styled.section`
 `
 
 export const Title = styled.h2`
-  margin: 12px 0 0;
+  font-size: 2.25em;
+  font-weight: normal;
+  text-align: center;
+  max-width: 1024px;
+  margin: 24px auto;
+
+  span {
+    font-weight: bold;
+  }
 `
 
 export const Loading = styled.div`
@@ -99,22 +105,19 @@ export const PrevButton = styled.span`
 `
 
 export const Container = styled.div`
-  ${'' /* display: flex;
-  min-height: 100%; */}
   align-items: center;
   position: relative;
-  margin-top: 24px;
+  margin: 56px 0 24px;
   padding: 8px 0px;
 `
 
 export const Results = styled.div`
-  ${'' /* display: flex;
-	flex-flow: row wrap;
-  justify-content: center; */}
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: calc(2em + 2vh) calc(1.5em + 1vmin);
   grid-auto-flow: row dense;
+  width: 95%;
+  margin: 0 auto;
 `
 
 export const Result = styled.div`

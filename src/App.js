@@ -15,7 +15,6 @@ const topArtists2019 = [
   'Motley Crue',
   'Imagine Dragons',
   'Drake',
-  'P!nk',
   'Bruno Mars',
   'Ed Sheeran',
   'Maroon 5',
@@ -40,7 +39,7 @@ const app = (props) => {
       })
       props.setSearch && props.setSearch(params, response.data)
     } catch (error) {
-      console.warn(error);
+      console.error(error)
     }
   }
 
