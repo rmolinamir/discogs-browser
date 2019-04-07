@@ -1,10 +1,9 @@
 import React from 'react'
 import axios from './axios/axios'
+import { connect } from 'react-redux'
+import { searchCreators } from './store/actions'
 // JSX
 import Landing from './containers/Landing/Landing'
-// Redux & Saga
-import { connect } from 'react-redux';
-import { searchCreators } from './store/actions';
 
 /**
  * Hardcoded, but can be fetched from google trends or from a database.
@@ -16,7 +15,6 @@ const topArtists2019 = [
   'Motley Crue',
   'Imagine Dragons',
   'Drake',
-  'Panic! At The Disco',
   'P!nk',
   'Bruno Mars',
   'Ed Sheeran',
@@ -32,7 +30,6 @@ const app = (props) => {
   const fetchResults = async () => {
     try {
       const randomArtist = topArtists2019[Math.floor(Math.random() * topArtists2019.length)];
-      console.log(randomArtist)
       const params = {
         artist: randomArtist,
       }
@@ -41,10 +38,9 @@ const app = (props) => {
           ...params
         }
       })
-      console.group('fetchResults', response)
-      props.onMount && props.onMount(params, response.data)
+      props.setSearch && props.setSearch(params, response.data)
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   }
 
@@ -67,7 +63,7 @@ const app = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onMount: (params, data) => dispatch(searchCreators.onMount(params, data))
+		setSearch: (params, data) => dispatch(searchCreators.setSearch(params, data))
 	}
 }
 

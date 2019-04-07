@@ -9,7 +9,7 @@ import {
 } from './styled-components'
 import { Form, Input } from 'react-formalized'
 import Button from 'react-png-button'
-import SearchResults from '../../components/UI/SearchResults/SearchResults'
+import SearchResults from '../SearchResults/SearchResults'
 
 const app = () => {
   const onSubmitHandler = (event, formState) => {

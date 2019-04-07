@@ -2,12 +2,13 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.main`
-  height: 100%;
   width: 100%;
+  min-height: 105%;
+  max-width: 1020px;
+  margin: 0 auto;
   color: #383838;
   background: #FFF;
   position: relative;
-  overflow: hidden;
 `
 
 export const Container = styled.section`
@@ -19,7 +20,7 @@ export const Container = styled.section`
   width: 100%;
   color: inherit;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 12px 0;
   background: inherit;
 `
 
@@ -27,6 +28,7 @@ export const FormContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  height: 68px;
   max-width: 1020px;
   margin: 0 auto;
   position: relative;
@@ -69,14 +71,4 @@ export const Title = styled.h1`
   font-size: 1.5em;
   text-align: center;
   color: inherit;
-`
-
-export const SearchResults = styled.section`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 9px;
-  width: 100%;
-  height: 100%;
-  background: inherit;
 `

@@ -1,14 +1,10 @@
 import styled from 'styled-components'
 
-export const SearchResults = styled.section`
+export const Wrapper = styled.section`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 24px 12px 80px;
-  margin-top: 9px;
+  flex-flow: column;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: inherit;
 
   .disabled {
@@ -18,10 +14,9 @@ export const SearchResults = styled.section`
   }
 
   .pagination {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    z-index: 2;
+    position: sticky;
+    top: 12px;
     display: flex;
     padding: 12px 9px;
     max-width: 620px;
@@ -71,6 +66,16 @@ export const SearchResults = styled.section`
   }
 `
 
+export const Title = styled.h2`
+  margin: 12px 0 0;
+`
+
+export const Loading = styled.div`
+  margin: 0 auto; 
+  width: 33vmin;
+  height: 33vmin
+`
+
 export const NextButton = styled.span`
   display: flex;
   font-size: 2em;
@@ -91,4 +96,35 @@ export const PrevButton = styled.span`
     filter: FlipH;
     -ms-filter: "FlipH";
   }
+`
+
+export const Container = styled.div`
+  ${'' /* display: flex;
+  min-height: 100%; */}
+  align-items: center;
+  position: relative;
+  margin-top: 24px;
+  padding: 8px 0px;
+`
+
+export const Results = styled.div`
+  ${'' /* display: flex;
+	flex-flow: row wrap;
+  justify-content: center; */}
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: calc(2em + 2vh) calc(1.5em + 1vmin);
+  grid-auto-flow: row dense;
+`
+
+export const Result = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  position: relative;
+  width: 25%;
+  min-width: 340px;
+  max-width: 555px;
+  padding: 20px 2% 50px 2%;
+  text-align: left;
 `

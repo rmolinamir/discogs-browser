@@ -5,11 +5,18 @@ import * as actionTypes from './types'
  */
 export const searchActions = {
   setSearch: (action) => {
-    console.group('action', action)
-    const { searchQuery, data } = action
+    const { searchQuery, searchParams, data } = action
     return {
         type: actionTypes.SEARCH_SET_SEARCH,
+        searchParams,
         searchQuery,
+        data
+    }
+  },
+  updateSearch: (action) => {
+    const { data } = action
+    return {
+        type: actionTypes.SEARCH_UPDATE_SEARCH,
         data
     }
   }
@@ -19,17 +26,16 @@ export const searchActions = {
  * Sagas.
  */
 export const searchCreators = {
-  onMount: (searchParams, data) => {
+  setSearch: (searchParams, data) => {
     return {
-      type: actionTypes.SEARCH_ON_MOUNT,
+      type: actionTypes.SEARCH_INIT_SET_SEARCH,
       searchParams: searchParams,
       data: data
     }
   },
-  userSearch: (searchParams, data) => {
+  updateSearch: (data) => {
     return {
-      type: actionTypes.SEARCH_USER,
-      searchParams: searchParams,
+      type: actionTypes.SEARCH_INIT_UPDATE_SEARCH,
       data: data
     }
   }

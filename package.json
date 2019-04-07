@@ -8,6 +8,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-formalized": "^1.1.0",
+    "react-lazy-load-image-component": "^1.3.2",
     "react-paginate": "^6.3.0",
     "react-png-button": "^1.0.4",
     "react-png-modal": "^2.1.1",

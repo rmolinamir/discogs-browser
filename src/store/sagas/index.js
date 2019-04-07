@@ -4,7 +4,7 @@ import * as actionTypes from '../actions/types'
 
 export function* watchSearches () {
   yield all([
-    takeEvery(actionTypes.SEARCH_ON_MOUNT, searchSagas.setSearch),
-    takeEvery(actionTypes.SEARCH_USER, searchSagas.setSearch)
+    takeEvery(actionTypes.SEARCH_INIT_SET_SEARCH, searchSagas.setSearch),
+    takeEvery(actionTypes.SEARCH_INIT_UPDATE_SEARCH, searchSagas.updateSearch)
   ])
 }
