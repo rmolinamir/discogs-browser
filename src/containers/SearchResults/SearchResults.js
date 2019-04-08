@@ -130,7 +130,14 @@ const app = (props) => {
     <Wrapper>
       {props.searchQuery ? (
         <>
-          <Title>Search results for: <span>{props.searchQuery}</span></Title>  
+          {/* Depending on the route, the title will be different. */}
+          <Title>
+            {props.type === 'landing' ? (
+              <>Search results for: <span>{props.searchQuery}</span></>
+            ) : (
+              'Your collection'
+            )}
+          </Title>  
           <ReactPaginate
             pageCount={paginationData && paginationData.pages}
             marginPagesDisplayed={2}

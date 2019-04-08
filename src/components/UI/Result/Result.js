@@ -27,11 +27,12 @@ const CancelToken = axios.CancelToken
 let cancel
 
 const result = (props) => {
-  console.log('result', props)
+  console.log(props)
   const {
     community,
     cover_image,
     id,
+    master_url,
     thumb,
     title,
     user_data,
@@ -43,16 +44,38 @@ const result = (props) => {
   const [resultCollection, setResultCollection] = React.useState(user_data && user_data.in_collection)
   const [isSettingCollection, setSettingCollection] = React.useState(false)
 
+  /**
+   * If the `type` of the result is `master`, then we need to do a request to save the
+   * actual release ID.
+   */
+  const getReleaseId = async () => {
+    try {
+      const response = await axios.get(master_url, {
+        cancelToken: new CancelToken(function executor(c) {
+          // An executor function receives a cancel function as a parameter
+          cancel = c
+        })
+      })
+      return response.data.main_release
+    } catch {
+      return new Error()
+    }
+  }
+
   const addToCollection = async () => {
     await setSettingCollection(true)
     try {
-      const response = await collection.post(`/releases/${id}`, {
+      /**
+       * **NOTE:** If the `type` of the result is a `master`, we must get the `type` of the **main release ID**.
+       * Otherwise if the `type` is a `release` then it's fine to use its ID.
+       */
+      const releaseId = type === 'release' ? id : await getReleaseId()
+      const response = await collection.post(`/releases/${releaseId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
-      console.log('addToCollection response', response)
       // Delay 500ms, for a bit of smoothness.
       await new Promise(_ => setTimeout(_, 500))
       await setResultCollection(response.data)
@@ -69,7 +92,7 @@ const result = (props) => {
       await collection.delete(`/releases/${id}/instances/${instanceId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       // Delay 500ms, for a bit of smoothness.

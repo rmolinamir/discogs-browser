@@ -173,21 +173,26 @@ const modalContent = (props) => {
           {style && style.length ? (
             <Text>Style: <span>{style.join(', ')}.</span></Text>
           ) : null}
-          {/* This button handles adding or removing the result from the collection. */}
-          <Button
-            style={{
-              marginTop: '6px'
-            }}
-            blockButton
-            onClick={props.collectionHandler}
-            disabled={props.isSettingCollection}
-            button={!props.isResultInCollection ? 'primary' : 'danger'}>
-            {props.isSettingCollection ? (
-              <Icon icon='loading-one' />
-            ) : (
-              !props.isResultInCollection ? 'Add to my collection' : 'Remove from my collection'
-            )}
-          </Button>
+          {/**
+           * This button handles adding or removing the result from the collection. 
+           * Only render this button if the `type` of the result is a `master` or a `release`.
+          */}
+          {Boolean(type === 'release' || type === 'master') && (
+            <Button
+              style={{
+                marginTop: '6px'
+              }}
+              blockButton
+              onClick={props.collectionHandler}
+              disabled={props.isSettingCollection}
+              button={!props.isResultInCollection ? 'primary' : 'danger'}>
+              {props.isSettingCollection ? (
+                <Icon icon='loading-one' />
+              ) : (
+                !props.isResultInCollection ? 'Add to my collection' : 'Remove from my collection'
+              )}
+            </Button>
+          )}
           <Divider height='32px' />
           {/* Protection for  empty objects. */}
           {community && (
