@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import image_not_found from '../../../../assets/images/not_found_image.svg'
 // CSS
 import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
@@ -20,9 +21,15 @@ import {
   YoutubeVideo
 } from './styled-components'
 import { Icon } from 'react-svg-library'
-import Divider from '../../Divider/Divider'
-import image_not_found from '../../../../assets/images/not_found_image.svg'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import Button from 'react-png-button'
+import Divider from '../../Divider/Divider'
+
+/**
+ * Axios cancel token to cancel pending searches if user changes pages too fast.
+ */
+const CancelToken = axios.CancelToken
+let cancel
 
 const modalContent = (props) => {
   const [isLoading, setIsLoading] = React.useState(true)
@@ -47,8 +54,18 @@ const modalContent = (props) => {
   } = props
 
   const fetchData = async () => {
+    /**
+     * If `cancel` exists, it means there is a promise pending. It is best to cancel it
+     * to reduce the amount of unnecessary requests.
+     */
+    cancel && cancel('New search done by the user.')
     try {
-      const response =  master_url && await axios.get(master_url)
+      const response =  master_url && await axios.get(master_url, {
+        cancelToken: new CancelToken(function executor(c) {
+          // An executor function receives a cancel function as a parameter
+          cancel = c;
+        })
+      })
       const data = await {
         community: response&& response.data && response.data.community,
         tracklist: response && response.data.tracklist && response.data.tracklist[0],
@@ -106,6 +123,15 @@ const modalContent = (props) => {
     }
   }, [props.open])
 
+  /**
+   * Cancels any pending promises when unmounting.
+   */
+  React.useEffect(() => {
+    return () => {
+      cancel && cancel('Request cancelled by the user.')
+    }
+  }, [])
+
   return (
     <>
       <Wrapper>
@@ -136,18 +162,33 @@ const modalContent = (props) => {
           </Header>
           <Divider height='24px' />
           {/* Only show the following props if they are available. */}
-          {country && country.length && (
+          {country && country.length ? (
             <Text>Country: <span>{country}.</span></Text>
-          )}
-          {format && format.length && (
+          ) : null}
+          {format && format.length ? (
             <Text>Available on: <span>{format.join(', ')}.</span></Text>
-          )}
-          {genre && genre.length && (
+          ) : null}
+          {genre && genre.length ? (
             <Text>Genre: <span>{genre.join(', ')}.</span></Text>
-          )}
-          {style && style.length && (
+          ) : null}
+          {style && style.length ? (
             <Text>Style: <span>{style.join(', ')}.</span></Text>
-          )}
+          ) : null}
+          {/* This button handles adding or removing the result from the collection. */}
+          <Button
+            style={{
+              marginTop: '6px'
+            }}
+            blockButton
+            onClick={props.collectionHandler}
+            disabled={props.isSettingCollection}
+            button={!props.isResultInCollection ? 'primary' : 'danger'}>
+            {props.isSettingCollection ? (
+              <Icon icon='loading-one' />
+            ) : (
+              !props.isResultInCollection ? 'Add to my collection' : 'Remove from my collection'
+            )}
+          </Button>
           <Divider height='32px' />
           {/* Protection for  empty objects. */}
           {community && (

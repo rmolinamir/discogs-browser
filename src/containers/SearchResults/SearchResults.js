@@ -18,7 +18,6 @@ import {
 import Result from '../../components/UI/Result/Result'
 import ReactPaginate from 'react-paginate'
 import { Icon } from 'react-svg-library'
-// import Divider from '../../components/UI/Divider/Divider'
 
 /**
  * Axios cancel token to cancel pending searches if user changes pages too fast.
@@ -35,19 +34,6 @@ const app = (props) => {
   const [paginationData, setPaginationData] = React.useState()
   const [isLoading, setIsLoading] = React.useState(true)
   const [areResultsLoading, setResultsLoading] = React.useState(true)
-
-  const paginationDataHandler = (data) => {
-    setPaginationData({ ...data })
-    setIsLoading(false)
-    setResultsLoading(false)
-  }
-
-  React.useEffect(() => {
-    if (Boolean(props.data && props.data.pagination && props.data.results)) {
-      const { pagination } = props.data
-      paginationDataHandler(pagination)
-    }
-  }, [props.data])
 
   const scrollToTop = () => {
     if (myContainer && myContainer.current) {
@@ -66,10 +52,10 @@ const app = (props) => {
   const onPageChangeHandler = async (pageObjectData) => {
     const selectedPage = pageObjectData.selected + 1
     /**
-   * If `cancel` exists, it means there is a promise pending. It is best to cancel it
-   * to reduce the amount of unnecessary requests.
-   */
-    cancel && cancel('New search done by the user.')
+     * If `cancel` exists, it means there is a promise pending. It is best to cancel it
+     * to reduce the amount of unnecessary requests.
+     */
+    cancel && cancel('New page selected by the user.')
     if (paginationData) {
       await setResultsLoading(true)
       await scrollToTop()
@@ -112,6 +98,32 @@ const app = (props) => {
           />
       )
     })
+  }, [])
+
+  const paginationDataHandler = (data) => {
+    setPaginationData({ ...data })
+    setIsLoading(false)
+    setResultsLoading(false)
+  }
+
+  /**
+   * Every time the data changes means there was a change in the page.
+   * If so, then the pagination component will be updated appropriately.
+   */
+  React.useEffect(() => {
+    if (Boolean(props.data && props.data.pagination && props.data.results)) {
+      const { pagination } = props.data
+      paginationDataHandler(pagination)
+    }
+  }, [props.data])
+
+  /**
+   * Cancels any pending promises when unmounting.
+   */
+  React.useEffect(() => {
+    return () => {
+      cancel && cancel('Request cancelled by the user.')
+    }
   }, [])
 
   return (

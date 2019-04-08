@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import fetch from '../../fetch/axios'
 import { connect } from 'react-redux'
 import { searchCreators } from '../../store/actions'
@@ -13,6 +14,12 @@ import { Form, Input } from 'react-formalized'
 import Button from 'react-png-button'
 import SearchResults from '../SearchResults/SearchResults'
 import { Icon } from 'react-svg-library'
+
+/**
+ * Axios cancel token to cancel pending searches if user changes pages too fast.
+ */
+const CancelToken = axios.CancelToken
+let cancel
 
 const landing = (props) => {
   const [isLoading, setIsLoading] = React.useState(false)
@@ -35,15 +42,28 @@ const landing = (props) => {
       const response = await fetch.get('', {
         params: {
           ...params
-        }
+        },
+        cancelToken: new CancelToken(function executor(c) {
+          // An executor function receives a cancel function as a parameter
+          cancel = c;
+        })
       })
       props.setSearch && await props.setSearch(params, response.data)
-    await setIsLoading(false)
-  } catch (error) {
+      await setIsLoading(false)
+    } catch (error) {
       await console.log(error);
-    await setIsLoading(false)
+      await setIsLoading(false)
+    }
   }
-  }
+
+  /**
+   * Cancels any pending promises when unmounting.
+   */
+  React.useEffect(() => {
+    return () => {
+      cancel && cancel('Request cancelled by the user.')
+    }
+  }, [])
 
   return (
     <Wrapper>
