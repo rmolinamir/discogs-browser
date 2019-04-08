@@ -131,7 +131,7 @@ const app = (props) => {
       {props.searchQuery ? (
         <>
           {/* Depending on the route, the title will be different. */}
-          <Title>Search results for: <span>{props.searchQuery}</span></Title>  
+          <Title>Your collection</Title>  
           <ReactPaginate
             pageCount={paginationData && paginationData.pages}
             marginPagesDisplayed={2}

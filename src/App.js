@@ -1,8 +1,11 @@
 import React from 'react'
-import axios from './fetch/axios'
+import fetch from './fetch/axios'
 import { connect } from 'react-redux'
 import { searchCreators } from './store/actions'
 // JSX
+import { Route, Switch, Redirect } from 'react-router-dom'
+import ScrollToTop from './hoc/ScrollToTop/ScrollToTop'
+import Collection from './containers/Collection/Collection'
 import Landing from './containers/Landing/Landing'
 
 /**
@@ -26,13 +29,16 @@ const topArtists2019 = [
 ]
 
 const app = (props) => {
+  /**
+   * Initial results based on the latests top trending artists on the bill board.
+   */
   const fetchResults = async () => {
     try {
       const randomArtist = topArtists2019[Math.floor(Math.random() * topArtists2019.length)];
       const params = {
         artist: randomArtist,
       }
-      const response = await axios.get('', {
+      const response = await fetch.get('', {
         params: {
           ...params
         }
@@ -56,7 +62,14 @@ const app = (props) => {
   }, [])
 
   return (
-    <Landing />
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path='/collection' component={Collection} />
+        <Route path='/' exact component={Landing} />
+        <Redirect to='/' />
+      </Switch>
+    </>
   )
 }
 

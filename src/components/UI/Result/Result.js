@@ -1,7 +1,7 @@
 import React from 'react'
 import image_not_found from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
-import collection from '../../../collection/axios'
+import collection, { uncategorizedId } from '../../../collection/axios'
 // CSS
 import modalCSS from './Modal.module.css'
 import 'react-lazy-load-image-component/src/effects/blur.css'
@@ -27,7 +27,7 @@ const CancelToken = axios.CancelToken
 let cancel
 
 const result = (props) => {
-  console.log(props)
+  // console.log(props)
   const {
     community,
     cover_image,
@@ -70,7 +70,7 @@ const result = (props) => {
        * Otherwise if the `type` is a `release` then it's fine to use its ID.
        */
       const releaseId = type === 'release' ? id : await getReleaseId()
-      const response = await collection.post(`/releases/${releaseId}`, {
+      const response = await collection.post(`/${uncategorizedId}/releases/${releaseId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
           cancel = c
@@ -89,7 +89,7 @@ const result = (props) => {
     await setSettingCollection(true)
     try {
       const instanceId = resultCollection ? resultCollection.instance_id : id
-      await collection.delete(`/releases/${id}/instances/${instanceId}`, {
+      await collection.delete(`/${uncategorizedId}/releases/${id}/instances/${instanceId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
           cancel = c

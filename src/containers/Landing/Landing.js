@@ -89,9 +89,7 @@ const landing = (props) => {
           </Form>
         </FormContainer>
         <Title>Search for anything in Discogs' largest online music database on the web</Title>
-        <SearchResults
-          type='landing'
-          isLoading={isLoading} />
+        <SearchResults isLoading={isLoading} />
       </Container>
     </Wrapper>
   )

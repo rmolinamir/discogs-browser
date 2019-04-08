@@ -1,19 +1,15 @@
 import React from 'react'
 import axios from 'axios'
-import fetch from '../../fetch/axios'
+import collection, { allId } from '../../collection/axios'
 import { connect } from 'react-redux'
 import { searchCreators } from '../../store/actions'
 // JSX
 import {
   Wrapper,
   Container,
-  Title,
-  FormContainer
+  Title
 } from './styled-components'
-import { Form, Input } from 'react-formalized'
-import Button from 'react-png-button'
-import SearchResults from '../SearchResults/SearchResults'
-import { Icon } from 'react-svg-library'
+import CollectionResults from '../CollectionResults/CollectionResults'
 
 /**
  * Axios cancel token to cancel pending searches if user changes pages too fast.
@@ -21,25 +17,13 @@ import { Icon } from 'react-svg-library'
 const CancelToken = axios.CancelToken
 let cancel
 
-const landing = (props) => {
+const component = (props) => {
   const [isLoading, setIsLoading] = React.useState(false)
 
-  const onSubmitHandler = (event, formState) => {
-    event.preventDefault()
-    const params = {
-      artist: formState && formState.artist && formState.artist.value,
-      track: formState && formState.track && formState.track.value
-    }
-    // Only fetch if any of them exist.
-    if (params.artist || params.track) {
-      fetchResults(params)
-    } 
-  }
-
-  const fetchResults = async (params) => {
+  const fetchCollection = async (params) => {
     await setIsLoading(true)
     try {
-      const response = await fetch.get('', {
+      const response = await collection.get(`/${allId}/releases`, {
         params: {
           ...params
         },
@@ -48,7 +32,8 @@ const landing = (props) => {
           cancel = c;
         })
       })
-      props.setSearch && await props.setSearch(params, response.data)
+      console.log('fetchCollection response', response)
+      // props.setSearch && await props.setSearch(params, response.data)
       await setIsLoading(false)
     } catch (error) {
       await console.log(error);
@@ -57,9 +42,11 @@ const landing = (props) => {
   }
 
   /**
-   * Cancels any pending promises when unmounting.
+   * Sets the collection when mounting and cancels
+   * any pending promises when unmounting.
    */
   React.useEffect(() => {
+    fetchCollection()
     return () => {
       cancel && cancel('Request cancelled by the user.')
     }
@@ -68,28 +55,8 @@ const landing = (props) => {
   return (
     <Wrapper>
       <Container>
-        <FormContainer>
-          <Form onSubmit={onSubmitHandler}>
-            <Input
-              identifier='artist'
-              placeholder='Artist' />
-            <Input
-              identifier='track'
-              placeholder='Song' />
-            <Button
-              disabled={isLoading}
-              style={{
-                marginTop: '9px'
-              }}
-              blockButton
-              type='submit'
-              button='primary'>
-              {isLoading ? <Icon size='2em' icon='loading-two' /> : 'Search'}
-            </Button>
-          </Form>
-        </FormContainer>
         <Title>Search for anything in Discogs' largest online music database on the web</Title>
-        <SearchResults isLoading={isLoading} />
+        <CollectionResults isLoading={isLoading} />
       </Container>
     </Wrapper>
   )
@@ -101,4 +68,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(null, mapDispatchToProps)(landing)
+export default connect(null, mapDispatchToProps)(component)

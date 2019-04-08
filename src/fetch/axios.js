@@ -10,6 +10,6 @@ const instance = axios.create({
     token: discogsRequestToken,
     'per_page': resultsPerPage
   }
-});
+})
 
 export default instance
