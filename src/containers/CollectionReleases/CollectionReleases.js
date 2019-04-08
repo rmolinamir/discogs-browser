@@ -25,13 +25,14 @@ import { Icon } from 'react-svg-library'
 const CancelToken = axios.CancelToken
 let cancel
 
-const app = (props) => {
+const collectionReleases = (props) => {
   /**
    * To scroll up after every change of page.
    */
   const myContainer = React.useRef(null)
 
   const [paginationData, setPaginationData] = React.useState()
+  const [currentPage, setCurrentPage] = React.useState(1)
   const [isLoading, setIsLoading] = React.useState(true)
   const [areReleasesLoading, setReleasesLoading] = React.useState(true)
 
@@ -61,15 +62,15 @@ const app = (props) => {
       await scrollToTop()
       const response = await collection.get(`/${allId}/releases`, {
         params: {
-          ...props.searchParams,
           page: selectedPage
         },
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       await props.setCollection && props.setCollection(response.data)
+      await setCurrentPage(selectedPage)
       await setReleasesLoading(false)
     }
   }
@@ -79,7 +80,11 @@ const app = (props) => {
       return (
         <Release
           key={release.instance_id}
-          {...release.basic_information} />
+          totalReleases={releases.length}
+          instance_id={release.instance_id}
+          pageCount={paginationData && paginationData.pages}
+          currentPage={currentPage}
+          {...release.basic_information}/>
       )
     })
   }
@@ -112,6 +117,7 @@ const app = (props) => {
   React.useEffect(() => {
     if (Boolean(props.pagination)) {
       const { pagination } = props
+      setCurrentPage(props.pagination.page) // Update the selected page
       paginationDataHandler(pagination)
     }
   }, [props])
@@ -132,7 +138,8 @@ const app = (props) => {
           {/* Depending on the route, the title will be different. */}
           <Title>Your collection</Title>  
           <ReactPaginate
-            pageCount={paginationData && paginationData.pages}
+            pageCount={paginationData && paginationData.pages || 0}
+            forcePage={currentPage - 1}
             marginPagesDisplayed={2}
             pageRangeDisplayed={4}
             onPageChange={onPageChangeHandler}
@@ -179,7 +186,7 @@ const app = (props) => {
               </Releases>
             ) : (
               <NoReleases>
-                No results found for "{props.searchQuery}".
+                You currently have no releases added to your collection.
               </NoReleases>
             )
           )
@@ -202,4 +209,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(app)
+export default connect(mapStateToProps, mapDispatchToProps)(collectionReleases)

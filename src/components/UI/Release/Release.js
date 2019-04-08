@@ -1,7 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import image_not_found from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
-import collection, { uncategorizedId } from '../../../collection/axios'
+import collection, { uncategorizedId, allId } from '../../../collection/axios'
+import { collectionCreators } from '../../../store/actions'
 // CSS
 import modalCSS from './Modal.module.css'
 import 'react-lazy-load-image-component/src/effects/blur.css'
@@ -31,50 +33,57 @@ const release = (props) => {
     id,
     thumb,
     title,
-    user_data,
-    year
+    year,
+    currentPage,
+    pageCount,
+    totalReleases,
+    setCollection,
+    instance_id
   } = props
 
   const [isModalOpen, setModalOpen] = React.useState(false)
-  const [releaseCollection, setReleaseCollection] = React.useState(user_data && user_data.in_collection)
+  const [releaseCollection] = React.useState(instance_id)
   const [isSettingCollection, setSettingCollection] = React.useState(false)
 
-  const addToCollection = async () => {
-    await setSettingCollection(true)
-    try {
-      /**
-       * **NOTE:** If the `type` of the release is a `master`, we must get the `type` of the **main release ID**.
-       * Otherwise if the `type` is a `release` then it's fine to use its ID.
-       */
-      const response = await collection.post(`/${uncategorizedId}/releases/${id}`, {
-        cancelToken: new CancelToken(function executor(c) {
-          // An executor function receives a cancel function as a parameter
-          cancel = c
-        })
-      })
-      // Delay 500ms, for a bit of smoothness.
-      await new Promise(_ => setTimeout(_, 500))
-      await setReleaseCollection(response.data)
-      await setSettingCollection(false)
-    } catch {
-      await setSettingCollection(false)
-    }
-  }
-
+  /**
+   * To smoothly remove the item from collection, `removeFromCollection` will:
+   * 1. Set the loading state as `true`.
+   * 2. Send the axios delete request and then afterwards execute a new request to fetch
+   *    the new pagination data, and releases. The newly selected page (which is either the
+   *    current one or the previous one depending on the amount of items and currentPage)
+   *    is also sent to calculate the appropriate releases.
+   * 3. Dismount modal.
+   * 4. Delay 200ms to smooth the unmounting transition/animation.
+   * 5. Update the current new pagination and releases, component unmounts here.
+   */
   const removeFromCollection = async () => {
     await setSettingCollection(true)
     try {
-      const instanceId = releaseCollection ? releaseCollection.instance_id : id
-      await collection.delete(`/${uncategorizedId}/releases/${id}/instances/${instanceId}`, {
+      await collection.delete(`/${uncategorizedId}/releases/${id}/instances/${instance_id}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
           cancel = c
         })
       })
-      // Delay 500ms, for a bit of smoothness.
-      await new Promise(_ => setTimeout(_, 500))
-      await setReleaseCollection(undefined)
-      await setSettingCollection(false)
+      const isOnLastPage = await currentPage === pageCount
+      const isLastReleaseOnPage = await totalReleases === 1
+      // The new page will be either the current page, or one page less if it's the last release.
+      const newPage = await (isOnLastPage && isLastReleaseOnPage) ? currentPage - 1 : currentPage
+      const response = await collection.get(`/${allId}/releases`, {
+        params: {
+          page: newPage
+        },
+        cancelToken: new CancelToken(function executor(c) {
+          // An executor function receives a cancel function as a parameter
+          cancel = c
+        })
+      })
+      await setModalOpen(false)
+      // Delay 200ms, for a bit of smoothness and let the modal close.
+      await new Promise(_ => setTimeout(_, 100))
+      await console.log('response data', response.data)
+      await setCollection && setCollection(response.data)
+      // At this point, the component unmounts.
     }
     catch {
       await setSettingCollection(false)
@@ -91,14 +100,7 @@ const release = (props) => {
      * to reduce the amount of unnecessary requests.
      */
     cancel && cancel('New collection request made by the user.')
-    switch(Boolean(releaseCollection)) {
-      case true:
-        removeFromCollection()
-        break
-      case false:
-      default:
-        addToCollection()
-    }
+    removeFromCollection()
   }
 
   /**
@@ -152,4 +154,11 @@ const release = (props) => {
   )
 }
 
-export default release
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setCollection: (data) => dispatch(collectionCreators.setCollection(data))
+	}
+}
+
+
+export default connect(null, mapDispatchToProps)(release)

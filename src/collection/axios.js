@@ -13,4 +13,13 @@ const instance = axios.create({
   }
 })
 
+export const byRelease = axios.create({
+  baseURL: `https://api.discogs.com/users/${username}/collection/releases`,
+  timeout: 10000,
+  params: {
+    token: discogsRequestToken,
+    'per_page': resultsPerPage
+  }
+})
+
 export default instance

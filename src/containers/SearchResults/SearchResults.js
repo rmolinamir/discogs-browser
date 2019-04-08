@@ -25,7 +25,7 @@ import { Icon } from 'react-svg-library'
 const CancelToken = axios.CancelToken
 let cancel
 
-const app = (props) => {
+const searchResults = (props) => {
   /**
    * To scroll up after evey search.
    */
@@ -203,4 +203,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(app)
+export default connect(mapStateToProps, mapDispatchToProps)(searchResults)

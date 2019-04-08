@@ -43,9 +43,9 @@ const app = (props) => {
    */
   const fetchResults = async () => {
     try {
-      const randomArtist = topArtists2019[Math.floor(Math.random() * topArtists2019.length)];
+      const randomArtist = topArtists2019[Math.floor(Math.random() * topArtists2019.length)]
       const params = {
-        artist: randomArtist,
+        artist: randomArtist
       }
       const response = await fetch.get('', {
         params: {
@@ -61,7 +61,6 @@ const app = (props) => {
   const fetchCollection = async (params) => {
     try {
       const response = await collection.get(`/${allId}/releases`)
-      console.log('fetchCollection response', response)
       props.setCollection && await props.setCollection(response.data)
     } catch (error) {
       await console.error(error);

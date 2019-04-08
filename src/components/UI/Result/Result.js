@@ -1,7 +1,8 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import image_not_found from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
-import collection, { uncategorizedId } from '../../../collection/axios'
+import collection, { uncategorizedId, byRelease } from '../../../collection/axios'
 // CSS
 import modalCSS from './Modal.module.css'
 import 'react-lazy-load-image-component/src/effects/blur.css'
@@ -27,7 +28,6 @@ const CancelToken = axios.CancelToken
 let cancel
 
 const result = (props) => {
-  console.log(props)
   const {
     community,
     cover_image,
@@ -37,12 +37,13 @@ const result = (props) => {
     title,
     user_data,
     year,
-    type
+    type,
+    collectionReleases
   } = props
 
   const [isModalOpen, setModalOpen] = React.useState(false)
-  const [resultCollection, setResultCollection] = React.useState(user_data && user_data.in_collection)
-  const [isSettingCollection, setSettingCollection] = React.useState(false)
+  const [resultInstanceId, setResultInstanceId] = React.useState(undefined)
+  const [isSettingCollection, setSettingCollection] = React.useState(true)
 
   /**
    * If the `type` of the result is `master`, then we need to do a request to save the
@@ -78,7 +79,7 @@ const result = (props) => {
       })
       // Delay 500ms, for a bit of smoothness.
       await new Promise(_ => setTimeout(_, 500))
-      await setResultCollection(response.data)
+      await setResultInstanceId(response.data.instance_id)
       await setSettingCollection(false)
     } catch {
       await setSettingCollection(false)
@@ -88,7 +89,7 @@ const result = (props) => {
   const removeFromCollection = async () => {
     await setSettingCollection(true)
     try {
-      const instanceId = resultCollection ? resultCollection.instance_id : id
+      const instanceId = resultInstanceId ? resultInstanceId : id
       await collection.delete(`/${uncategorizedId}/releases/${id}/instances/${instanceId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
@@ -97,7 +98,7 @@ const result = (props) => {
       })
       // Delay 500ms, for a bit of smoothness.
       await new Promise(_ => setTimeout(_, 500))
-      await setResultCollection(undefined)
+      await setResultInstanceId(undefined)
       await setSettingCollection(false)
     }
     catch {
@@ -115,7 +116,7 @@ const result = (props) => {
      * to reduce the amount of unnecessary requests.
      */
     cancel && cancel('New collection request made by the user.')
-    switch(Boolean(resultCollection)) {
+    switch(Boolean(resultInstanceId)) {
       case true:
         removeFromCollection()
         break
@@ -124,6 +125,41 @@ const result = (props) => {
         addToCollection()
     }
   }
+
+  /**
+   * Gets the instance ID depending if the type of the result is `release` or `master`.
+   */
+  const getInstanceId = async () => {
+    if (!collectionReleases.length) {
+      return undefined
+    }
+    if (user_data && user_data.in_collection) {
+      if (type === 'release') {
+        const collectionRelease = await collectionReleases.find(release => release.id === id)
+        return collectionRelease && setResultInstanceId(collectionRelease.instance_id)
+      }
+      const resultId = await getReleaseId() // This is this result's release ID.
+      const collectionRelease = await byRelease.get(`/${resultId}`, {
+        cancelToken: new CancelToken(function executor(c) {
+          // An executor function receives a cancel function as a parameter
+          cancel = c
+        })
+      })
+      const instanceId = await collectionRelease.data.releases.length && collectionRelease.data.releases[0].instance_id
+      return collectionRelease && setResultInstanceId(instanceId)
+    }
+    return undefined
+  }
+
+  /**
+   * Sets the instanceId after `props.collectionReleases` has been set in the redux store.
+   */
+  React.useEffect(() => {
+    if (Boolean(props.collectionReleases.length)) {
+      setSettingCollection(false)
+      getInstanceId()
+    }
+  }, [props.collectionReleases])
 
   /**
    * Cancels any pending promises when unmounting.
@@ -144,7 +180,7 @@ const result = (props) => {
           <ModalContent
             open={isModalOpen}
             collectionHandler={collectionHandler}
-            isResultInCollection={Boolean(resultCollection)}
+            isResultInCollection={Boolean(resultInstanceId)}
             isSettingCollection={isSettingCollection}
             {...props} />
         </Modal>
@@ -193,4 +229,10 @@ const result = (props) => {
   )
 }
 
-export default result
+const mapStateToProps = (state) => {
+	return {
+    collectionReleases: state.collectionReducer && state.collectionReducer.releases
+	}
+}
+
+export default connect(mapStateToProps)(result)
