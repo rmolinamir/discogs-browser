@@ -48,7 +48,6 @@ const modalContent = (props) => {
     style,
     thumb,
     title,
-    user_data,
     year,
     type
   } = props

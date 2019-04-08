@@ -116,7 +116,6 @@ const result = (props) => {
       {user_data && (
         <Modal
           className={modalCSS.Aesthetics}
-          center
           closeModal={() => setModalOpen(false)}
           open={isModalOpen}>
           <ModalContent

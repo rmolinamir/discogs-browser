@@ -4,6 +4,11 @@ import image_not_found from '../../../../assets/images/not_found_image.svg'
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 680px) {
+    flex-direction: column;
+    margin-left: 24px;
+  }
 `
 
 export const Cover = styled.div`
@@ -13,6 +18,10 @@ export const Cover = styled.div`
   position: relative;
   width: auto;
   height: 100%;
+
+  @media (max-width: 680px) {
+    margin-bottom: 24px;
+  }
 `
 
 export const ImageContainer = styled.div`
