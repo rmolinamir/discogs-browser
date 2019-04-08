@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import fetch from '../../fetch/axios'
-import { searchCreators } from '../../store/actions'
+import collection, { allId } from '../../collection/axios'
+import { collectionCreators } from '../../store/actions'
 import loadingSVG from '../../assets/images/loading.svg'
 // JSX
 import { 
@@ -12,10 +12,10 @@ import {
   PrevButton,
   NextButton,
   Container,
-  Results,
-  NoResults
+  Releases,
+  NoReleases
 } from './styled-components'
-import Result from '../../components/UI/Result/Result'
+import Release from '../../components/UI/Release/Release'
 import ReactPaginate from 'react-paginate'
 import { Icon } from 'react-svg-library'
 
@@ -27,13 +27,13 @@ let cancel
 
 const app = (props) => {
   /**
-   * To scroll up after evey search.
+   * To scroll up after every change of page.
    */
   const myContainer = React.useRef(null)
 
   const [paginationData, setPaginationData] = React.useState()
   const [isLoading, setIsLoading] = React.useState(true)
-  const [areResultsLoading, setResultsLoading] = React.useState(true)
+  const [areReleasesLoading, setReleasesLoading] = React.useState(true)
 
   const scrollToTop = () => {
     if (myContainer && myContainer.current) {
@@ -57,9 +57,9 @@ const app = (props) => {
      */
     cancel && cancel('New page selected by the user.')
     if (paginationData) {
-      await setResultsLoading(true)
+      await setReleasesLoading(true)
       await scrollToTop()
-      const response = await fetch.get('', {
+      const response = await collection.get(`/${allId}/releases`, {
         params: {
           ...props.searchParams,
           page: selectedPage
@@ -69,41 +69,40 @@ const app = (props) => {
           cancel = c;
         })
       })
-      await props.updateSearch && props.updateSearch(response.data)
-      await setResultsLoading(false)
+      await props.setCollection && props.setCollection(response.data)
+      await setReleasesLoading(false)
     }
   }
 
-  const setResults = (results) => {
-    return results.map(result => {
+  const setReleases = (releases) => {
+    return releases.map(release => {
       return (
-        <Result
-          key={result.id}
-          {...result} />
+        <Release
+          key={release.instance_id}
+          {...release.basic_information} />
       )
     })
   }
 
-  const searchResults = props.data && props.data.results && setResults(props.data.results)
+  const searchReleases = props.releases && props.releases.length && setReleases(props.releases)
 
-  const placeholderResults = React.useMemo(() => {
+  const placeholderReleases = React.useMemo(() => {
     const emptyArray = Array.from(new Array(16))
     return emptyArray.map((_, index) => {
       return (
-        <Result
+        <Release
           key={index}
           placeholder={loadingSVG}
           cover_image={loadingSVG}
-          thumb={loadingSVG}
-          />
+          thumb={loadingSVG} />
       )
     })
   }, [])
 
-  const paginationDataHandler = (data) => {
-    setPaginationData({ ...data })
+  const paginationDataHandler = (pagination) => {
+    setPaginationData({ ...pagination })
     setIsLoading(false)
-    setResultsLoading(false)
+    setReleasesLoading(false)
   }
 
   /**
@@ -111,11 +110,11 @@ const app = (props) => {
    * If so, then the pagination component will be updated appropriately.
    */
   React.useEffect(() => {
-    if (Boolean(props.data && props.data.pagination && props.data.results)) {
-      const { pagination } = props.data
+    if (Boolean(props.pagination)) {
+      const { pagination } = props
       paginationDataHandler(pagination)
     }
-  }, [props.data])
+  }, [props])
 
   /**
    * Cancels any pending promises when unmounting.
@@ -128,7 +127,7 @@ const app = (props) => {
 
   return (
     <Wrapper>
-      {props.searchQuery ? (
+      {paginationData ? (
         <>
           {/* Depending on the route, the title will be different. */}
           <Title>Your collection</Title>  
@@ -160,28 +159,28 @@ const app = (props) => {
       )}
       <Container ref={myContainer}>
         {isLoading ? (
-          <Results>
-            {placeholderResults}
-          </Results>
+          <Releases>
+            {placeholderReleases}
+          </Releases>
         ) : (
           /**
            * Only show the placeholder elements if the results are being fetched either by the form, or by
            * changing pages.
            */
-          areResultsLoading || props.isLoading ?
+          areReleasesLoading || props.isLoading ?
           (
-            <Results>
-              {placeholderResults}
-            </Results>
+            <Releases>
+              {placeholderReleases}
+            </Releases>
           ) : (
-            searchResults.length ? (
-              <Results>
-                {searchResults}
-              </Results>
+            searchReleases.length ? (
+              <Releases>
+                {searchReleases}
+              </Releases>
             ) : (
-              <NoResults>
+              <NoReleases>
                 No results found for "{props.searchQuery}".
-              </NoResults>
+              </NoReleases>
             )
           )
         )}
@@ -192,15 +191,14 @@ const app = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-    searchQuery: state.searchesReducer && state.searchesReducer.searchQuery,
-    searchParams: state.searchesReducer && state.searchesReducer.searchParams,
-    data: state.searchesReducer && state.searchesReducer.data
+    pagination: state.collectionReducer && state.collectionReducer.pagination,
+    releases: state.collectionReducer && state.collectionReducer.releases
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		updateSearch: (data) => dispatch(searchCreators.updateSearch(data))
+		setCollection: (data) => dispatch(collectionCreators.setCollection(data))
 	}
 }
 

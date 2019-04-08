@@ -94,8 +94,7 @@ const app = (props) => {
           key={index}
           placeholder={loadingSVG}
           cover_image={loadingSVG}
-          thumb={loadingSVG}
-          />
+          thumb={loadingSVG} />
       )
     })
   }, [])

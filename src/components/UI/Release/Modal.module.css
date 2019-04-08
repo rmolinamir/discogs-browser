@@ -1,0 +1,12 @@
+.Aesthetics {
+  background-color: var(--modal-background-color, rgb(255, 255, 255));
+  color: var(--modal-color, #484848);
+  position: relative;
+  min-width: 80vw;
+  max-width: 95%;
+  margin: 0 auto;
+  width: auto;
+  height: 100%;
+  padding: 18px;
+  border-radius: 4px;
+}

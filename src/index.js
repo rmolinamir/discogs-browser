@@ -18,7 +18,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers, composeEnhancers ? composeEnhancers(applyMiddleware(sagaMiddleware)) : applyMiddleware(sagaMiddleware));
 
-sagaMiddleware.run(sagas.watchSearches);
+sagaMiddleware.run(sagas.watchSearches)
+sagaMiddleware.run(sagas.watchCollection)
 
 ReactDOM.render(<Provider store={store}><BrowserRouter><App/></BrowserRouter></Provider>, document.getElementById('root'));
 

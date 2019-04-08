@@ -8,12 +8,11 @@ import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
 import {
   Title,
-  Result,
+  Release,
   Container,
   MoreInformation,
   StyledImage,
-  Text,
-  Community
+  Text
 } from './styled-components'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Icon } from 'react-svg-library'
@@ -26,51 +25,28 @@ import ModalContent from './ModalContent/ModalContent'
 const CancelToken = axios.CancelToken
 let cancel
 
-const result = (props) => {
-  console.log(props)
+const release = (props) => {
   const {
-    community,
     cover_image,
     id,
-    master_url,
     thumb,
     title,
     user_data,
-    year,
-    type
+    year
   } = props
 
   const [isModalOpen, setModalOpen] = React.useState(false)
-  const [resultCollection, setResultCollection] = React.useState(user_data && user_data.in_collection)
+  const [releaseCollection, setReleaseCollection] = React.useState(user_data && user_data.in_collection)
   const [isSettingCollection, setSettingCollection] = React.useState(false)
-
-  /**
-   * If the `type` of the result is `master`, then we need to do a request to save the
-   * actual release ID.
-   */
-  const getReleaseId = async () => {
-    try {
-      const response = await axios.get(master_url, {
-        cancelToken: new CancelToken(function executor(c) {
-          // An executor function receives a cancel function as a parameter
-          cancel = c
-        })
-      })
-      return response.data.main_release
-    } catch {
-      return new Error()
-    }
-  }
 
   const addToCollection = async () => {
     await setSettingCollection(true)
     try {
       /**
-       * **NOTE:** If the `type` of the result is a `master`, we must get the `type` of the **main release ID**.
+       * **NOTE:** If the `type` of the release is a `master`, we must get the `type` of the **main release ID**.
        * Otherwise if the `type` is a `release` then it's fine to use its ID.
        */
-      const releaseId = type === 'release' ? id : await getReleaseId()
-      const response = await collection.post(`/${uncategorizedId}/releases/${releaseId}`, {
+      const response = await collection.post(`/${uncategorizedId}/releases/${id}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
           cancel = c
@@ -78,7 +54,7 @@ const result = (props) => {
       })
       // Delay 500ms, for a bit of smoothness.
       await new Promise(_ => setTimeout(_, 500))
-      await setResultCollection(response.data)
+      await setReleaseCollection(response.data)
       await setSettingCollection(false)
     } catch {
       await setSettingCollection(false)
@@ -88,7 +64,7 @@ const result = (props) => {
   const removeFromCollection = async () => {
     await setSettingCollection(true)
     try {
-      const instanceId = resultCollection ? resultCollection.instance_id : id
+      const instanceId = releaseCollection ? releaseCollection.instance_id : id
       await collection.delete(`/${uncategorizedId}/releases/${id}/instances/${instanceId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
@@ -97,7 +73,7 @@ const result = (props) => {
       })
       // Delay 500ms, for a bit of smoothness.
       await new Promise(_ => setTimeout(_, 500))
-      await setResultCollection(undefined)
+      await setReleaseCollection(undefined)
       await setSettingCollection(false)
     }
     catch {
@@ -106,7 +82,7 @@ const result = (props) => {
   }
 
   /**
-   * If the result is in the collection then `removeFromCollection` will execute.
+   * If the release is in the collection then `removeFromCollection` will execute.
    * Othewise `addToCollection` is executed.
    */
   const collectionHandler = () => {
@@ -115,7 +91,7 @@ const result = (props) => {
      * to reduce the amount of unnecessary requests.
      */
     cancel && cancel('New collection request made by the user.')
-    switch(Boolean(resultCollection)) {
+    switch(Boolean(releaseCollection)) {
       case true:
         removeFromCollection()
         break
@@ -136,7 +112,7 @@ const result = (props) => {
 
   return (
     <>
-      {user_data && (
+      {id && (
         <Modal
           className={modalCSS.Aesthetics}
           closeModal={() => setModalOpen(false)}
@@ -144,14 +120,14 @@ const result = (props) => {
           <ModalContent
             open={isModalOpen}
             collectionHandler={collectionHandler}
-            isResultInCollection={Boolean(resultCollection)}
+            isReleaseInCollection={Boolean(releaseCollection)}
             isSettingCollection={isSettingCollection}
             {...props} />
         </Modal>
       )}
-      <Result onClick={() => setModalOpen(true)}>
+      <Release onClick={() => setModalOpen(true)}>
         <StyledImage>
-          {user_data && (
+          {id && (
             <MoreInformation>
               <Icon size='50%' icon='show' />
             </MoreInformation>
@@ -169,28 +145,11 @@ const result = (props) => {
         <Container>
           <Title>{title}</Title>
           <Text>{year}</Text>
-          <Text>{type}</Text>
-          {/* Protection for  empty objects. */}
-          {community && (
-            <>
-            <Community style={{
-                color: '#EDCE21'
-              }}>
-              <span>{community.have}</span>
-              <Icon icon='bullet-checkmark-no-bg' />
-            </Community>
-            <Community style={{
-                color: '#C45A5A'
-              }}>
-              <span>{community.want}</span>
-              <Icon icon='like' />
-            </Community>
-            </>
-          )}
+          <Text>Release</Text>
         </Container>
-      </Result>
+      </Release>
     </>
   )
 }
 
-export default result
+export default release

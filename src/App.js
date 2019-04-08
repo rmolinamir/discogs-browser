@@ -1,9 +1,18 @@
 import React from 'react'
 import fetch from './fetch/axios'
+import collection, { allId } from './collection/axios'
 import { connect } from 'react-redux'
-import { searchCreators } from './store/actions'
+import {
+  searchCreators,
+  collectionCreators
+} from './store/actions'
 // JSX
-import { Route, Switch, Redirect } from 'react-router-dom'
+import {
+  withRouter,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom'
 import ScrollToTop from './hoc/ScrollToTop/ScrollToTop'
 import Collection from './containers/Collection/Collection'
 import Landing from './containers/Landing/Landing'
@@ -45,18 +54,36 @@ const app = (props) => {
       })
       props.setSearch && props.setSearch(params, response.data)
     } catch (error) {
-      console.error(error)
+      await console.error(error)
+    }
+  }
+
+  const fetchCollection = async (params) => {
+    try {
+      const response = await collection.get(`/${allId}/releases`)
+      console.log('fetchCollection response', response)
+      props.setCollection && await props.setCollection(response.data)
+    } catch (error) {
+      await console.error(error);
     }
   }
 
   /**
    * This `useEffect` is the equivalent to `componendDidMount`.
+   * Here the results and the collection are set up initially for the redux store.
+   * Note that `fetchCollection` won't execute if the user is **initially** on the
+   * collection route, since the collection is updated every time the user visits
+   * that route.
    */
   React.useEffect(() => {
     // Delay at least 1 second for smooth transitions on mount.
+    const currentLocation = props.location.pathname
     new Promise(() => {
       setTimeout(() => {
         fetchResults()
+        if (currentLocation !== '/collection') {
+          fetchCollection()
+        }
       }, 1000)
     })
   }, [])
@@ -75,8 +102,9 @@ const app = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setSearch: (params, data) => dispatch(searchCreators.setSearch(params, data))
+		setSearch: (params, data) => dispatch(searchCreators.setSearch(params, data)),
+		setCollection: (data) => dispatch(collectionCreators.setCollection(data))
 	}
 }
 
-export default connect(null, mapDispatchToProps)(app)
+export default withRouter(connect(null, mapDispatchToProps)(app))

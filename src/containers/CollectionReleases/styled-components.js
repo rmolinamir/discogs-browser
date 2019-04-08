@@ -111,7 +111,7 @@ export const Container = styled.div`
   padding: 8px 0px;
 `
 
-export const Results = styled.div`
+export const Releases = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: calc(2em + 2vh) calc(1.5em + 1vmin);
@@ -120,7 +120,7 @@ export const Results = styled.div`
   margin: 0 auto;
 `
 
-export const Result = styled.div`
+export const Release = styled.div`
   display: inline-block;
   vertical-align: top;
   text-align: center;
@@ -132,7 +132,7 @@ export const Result = styled.div`
   text-align: left;
 `
 
-export const NoResults = styled.div`
+export const NoReleases = styled.div`
   display: block;
   padding: 18px;
   position: relative;
