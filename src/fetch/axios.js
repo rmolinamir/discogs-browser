@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-export const discogsRequestToken = 'rxdPcTSCazkeakCCdoniSEbUClXWfTtlsemLLnmR'
+import { discogsRequestToken } from '../shared/discogsParams'
 
 export const resultsPerPage = 20
 

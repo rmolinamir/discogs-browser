@@ -15,7 +15,7 @@ const divider = (props) => {
     top: 50%;
     transform: translateY(-50%);
     height: 1px;
-    opacity: ${props.opacity || 0.5};
+    opacity: ${props.opacity || 0.5} !important;
     background: ${props.color || 'currentColor'};
   `
 

@@ -78,8 +78,8 @@ export const Title = styled.h2`
 
 export const Loading = styled.div`
   margin: 0 auto; 
-  width: 33vmin;
-  height: 33vmin
+  width: 25vmin;
+  height: 25vmin;
 `
 
 export const NextButton = styled.span`
@@ -130,4 +130,18 @@ export const Result = styled.div`
   max-width: 555px;
   padding: 20px 2% 50px 2%;
   text-align: left;
+`
+
+export const NoResults = styled.div`
+  display: block;
+  padding: 18px;
+  position: relative;
+  color: #FFF;
+  background: #0062b3;
+  font-size: 21px;
+  border-radius: 6px;
+  margin: 0 auto 21px;
+  width: 95%;
+  text-align: center;
+  overflow: hidden;
 `

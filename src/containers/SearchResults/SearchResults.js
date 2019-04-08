@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import axiosInstance from '../../axios/axios'
+import fetch from '../../fetch/axios'
 import { searchCreators } from '../../store/actions'
 import loadingSVG from '../../assets/images/loading.svg'
 // JSX
@@ -12,7 +12,8 @@ import {
   PrevButton,
   NextButton,
   Container,
-  Results
+  Results,
+  NoResults
 } from './styled-components'
 import Result from '../../components/UI/Result/Result'
 import ReactPaginate from 'react-paginate'
@@ -50,7 +51,6 @@ const app = (props) => {
 
   const scrollToTop = () => {
     if (myContainer && myContainer.current) {
-      console.log('myContainer', myContainer)
       const currentScrollPosition = window.pageYOffset
       const desiredScrollPosition = myContainer.current.offsetTop - 56
       if (currentScrollPosition > desiredScrollPosition) {
@@ -65,7 +65,6 @@ const app = (props) => {
 
   const onPageChangeHandler = async (pageObjectData) => {
     const selectedPage = pageObjectData.selected + 1
-    console.log('selectedPage', selectedPage)
     /**
    * If `cancel` exists, it means there is a promise pending. It is best to cancel it
    * to reduce the amount of unnecessary requests.
@@ -74,7 +73,7 @@ const app = (props) => {
     if (paginationData) {
       await setResultsLoading(true)
       await scrollToTop()
-      const response = await axiosInstance.get('', {
+      const response = await fetch.get('', {
         params: {
           ...props.searchParams,
           page: selectedPage
@@ -102,7 +101,6 @@ const app = (props) => {
   const searchResults = props.data && props.data.results && setResults(props.data.results)
 
   const placeholderResults = React.useMemo(() => {
-    console.log('placeholderResults')
     const emptyArray = Array.from(new Array(16))
     return emptyArray.map((_, index) => {
       return (
@@ -116,11 +114,9 @@ const app = (props) => {
     })
   }, [])
 
-  console.log('areResultsLoading', areResultsLoading)
-
   return (
     <Wrapper>
-      {props.searchQuery && (
+      {props.searchQuery ? (
         <>
           <Title>Search results for: <span>{props.searchQuery}</span></Title>  
           <ReactPaginate
@@ -136,30 +132,44 @@ const app = (props) => {
             subContainerClassName={'pages pagination'}
             activeClassName={'active'} />
         </>
+      ) : (
+        <Loading>
+          <Icon
+            size='100%'
+            animationFill={[
+              '#00407C',
+              '#0364BF',
+              '#0364BF',
+              '#4BA7FC'
+            ]}
+            icon='loading-one' />
+        </Loading>
       )}
       <Container ref={myContainer}>
         {isLoading ? (
-          <Loading>
-            <Icon
-              size='100%'
-              animationFill={[
-                '#00407C',
-                '#0364BF',
-                '#0364BF',
-                '#4BA7FC'
-              ]}
-              icon='loading-one' />
-          </Loading>
+          <Results>
+            {placeholderResults}
+          </Results>
         ) : (
-          areResultsLoading ?
+          /**
+           * Only show the placeholder elements if the results are being fetched either by the form, or by
+           * changing pages.
+           */
+          areResultsLoading || props.isLoading ?
           (
             <Results>
               {placeholderResults}
             </Results>
           ) : (
-            <Results>
-              {searchResults}
-            </Results>
+            searchResults.length ? (
+              <Results>
+                {searchResults}
+              </Results>
+            ) : (
+              <NoResults>
+                No results found for "{props.searchQuery}".
+              </NoResults>
+            )
           )
         )}
       </Container>

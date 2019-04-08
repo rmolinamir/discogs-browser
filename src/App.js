@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from './axios/axios'
+import axios from './fetch/axios'
 import { connect } from 'react-redux'
 import { searchCreators } from './store/actions'
 // JSX

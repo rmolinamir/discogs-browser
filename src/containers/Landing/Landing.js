@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from '../../axios/axios'
+import fetch from '../../fetch/axios'
 import { connect } from 'react-redux'
 import { searchCreators } from '../../store/actions'
 // JSX
@@ -21,10 +21,10 @@ const landing = (props) => {
     event.preventDefault()
     const params = {
       artist: formState && formState.artist && formState.artist.value,
-      album: formState && formState.album && formState.album.value
+      track: formState && formState.track && formState.track.value
     }
     // Only fetch if any of them exist.
-    if (params.artist || params.album) {
+    if (params.artist || params.track) {
       fetchResults(params)
     } 
   }
@@ -32,7 +32,7 @@ const landing = (props) => {
   const fetchResults = async (params) => {
     await setIsLoading(true)
     try {
-      const response = await axios.get('', {
+      const response = await fetch.get('', {
         params: {
           ...params
         }
@@ -54,8 +54,8 @@ const landing = (props) => {
               identifier='artist'
               placeholder='Artist' />
             <Input
-              identifier='album'
-              placeholder='Album' />
+              identifier='track'
+              placeholder='Song' />
             <Button
               disabled={isLoading}
               style={{
@@ -69,7 +69,7 @@ const landing = (props) => {
           </Form>
         </FormContainer>
         <Title>Search for anything in Discogs' largest online music database on the web</Title>
-        <SearchResults />
+        <SearchResults isLoading={isLoading} />
       </Container>
     </Wrapper>
   )
