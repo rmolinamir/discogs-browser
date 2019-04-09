@@ -160,7 +160,7 @@ const collectionReleases = (props) => {
               {placeholderReleases}
             </Releases>
           ) : (
-            searchReleases.length ? (
+            searchReleases && searchReleases.length ? (
               <Releases>
                 {searchReleases}
               </Releases>
