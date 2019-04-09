@@ -7,7 +7,10 @@ import {
   searchCreators,
   collectionCreators
 } from './store/actions'
+// CSS
+import 'react-toastify/dist/ReactToastify.min.css'
 // JSX
+import { ToastContainer } from 'react-toastify'
 import {
   withRouter,
   Switch,
@@ -101,6 +104,15 @@ const app = (props) => {
 
   return (
     <Layout>
+      <ToastContainer
+        position='top-right'
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover />
       <ScrollToTop />
       <Switch>
         <Route path='/collection' component={Collection} />

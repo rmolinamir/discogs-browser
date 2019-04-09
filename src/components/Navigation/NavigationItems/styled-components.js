@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
 
 export const Navigation = styled.ul`
   user-select: none;
@@ -25,7 +24,7 @@ export const Wrapper = styled.div`
   height: 100%;
 `
 
-export const StyledLink = styled(NavLink)`
+export const StyledLink = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;

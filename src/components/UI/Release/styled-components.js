@@ -46,7 +46,7 @@ export const MoreInformation = styled.div`
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
-  background: rgb(141, 195, 244, 0.5);
+  background: rgba(220, 53, 69, 0.5);
   transition: all 200ms ease-in-out;
 
   svg {

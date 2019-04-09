@@ -5,10 +5,12 @@ import { connect } from 'react-redux'
 import imageNotFound from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
 import collection, { uncategorizedId, byRelease } from '../../../collection/axios'
+import { toast } from 'react-toastify'
 // CSS
 import modalCSS from './Modal.module.css'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
+import { withErrorHandler } from '../../../hoc/ErrorHandler/withErrorHandler'
 import {
   Title,
   Result,
@@ -82,6 +84,7 @@ const result = (props) => {
       // Delay 500ms, for a bit of smoothness.
       await new Promise(resolve => setTimeout(resolve, 500))
       await setResultInstanceId(response.data.instance_id)
+      await toast.success(`${title} has been successfully added to your collection!`)
       await setSettingCollection(false)
     } catch {
       await setSettingCollection(false)
@@ -101,6 +104,7 @@ const result = (props) => {
       // Delay 500ms, for a bit of smoothness.
       await new Promise(resolve => setTimeout(resolve, 500))
       await setResultInstanceId(undefined)
+      await toast.error(`You have successfully removed ${title} from your collection.`)
       await setSettingCollection(false)
     } catch {
       await setSettingCollection(false)
@@ -250,4 +254,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(result)
+export default withErrorHandler(connect(mapStateToProps)(result), collection)

@@ -6,10 +6,12 @@ import imageNotFound from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
 import collection, { uncategorizedId, allId } from '../../../collection/axios'
 import { collectionCreators } from '../../../store/actions'
+import { toast } from 'react-toastify'
 // CSS
 import modalCSS from './Modal.module.css'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
+import { withErrorHandler } from '../../../hoc/ErrorHandler/withErrorHandler'
 import {
   Title,
   Release,
@@ -82,6 +84,7 @@ const release = (props) => {
       })
       await setModalOpen(false)
       // Delay 300ms, for a bit of smoothness, and to let the modal close.
+      await toast.error(`You have successfully removed ${title} from your collection.`)
       await new Promise(resolve => setTimeout(resolve, 300))
       await setCollection && setCollection(response.data)
       // At this point, the component unmounts.
@@ -174,4 +177,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(release)
+export default withErrorHandler(connect(null, mapDispatchToProps)(release), collection)

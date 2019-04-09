@@ -6,6 +6,7 @@ import imageNotFound from '../../../../assets/images/not_found_image.svg'
 // CSS
 import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
+import { withErrorHandler } from '../../../../hoc/ErrorHandler/withErrorHandler'
 import {
   Wrapper,
   Cover,
@@ -291,4 +292,4 @@ modalContent.propTypes = {
   isSettingCollection: PropTypes.bool
 }
 
-export default React.memo(modalContent)
+export default withErrorHandler(React.memo(modalContent), axios)

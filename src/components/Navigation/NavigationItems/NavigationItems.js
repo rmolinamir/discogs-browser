@@ -19,7 +19,10 @@ const Children = (props) => {
     case 'MobileDrawer':
       return props.width < 1121 ? null : (
         <>
-          <NavLink to='/'>
+          <NavLink
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.discogs.com/'>
             <img src={logo} draggable='false' alt='' />
           </NavLink>
           <Spacing />
@@ -41,7 +44,10 @@ const Children = (props) => {
               Search
             </NavigationItem>
           </Container>
-          <NavLink to='/'>
+          <NavLink
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.discogs.com/'>
             <img src={logo} draggable='false' alt='' />
           </NavLink>
           <Container>
