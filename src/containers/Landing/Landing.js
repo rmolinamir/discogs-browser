@@ -84,7 +84,7 @@ const landing = (props) => {
               }}
               blockButton
               type='submit'
-              button='primary'>
+              button='danger'>
               {isLoading ? <Icon size='2em' icon='loading-two' /> : 'Search'}
             </Button>
           </Form>

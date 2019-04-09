@@ -1,0 +1,315 @@
+.Wrapper {
+    position: relative;
+}
+
+.SearchBarAnchor {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+@media (max-width: 1121px) {
+	.SearchBarAnchor {
+        justify-content: flex-start;
+        width: 100%;
+	}
+}
+
+.SearchBarWrapper {
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+@media (min-width: 1120px) {
+.SearchBarWrapper {
+        top: auto;
+        left: 18px;
+		transition: width 200ms ease-in;
+		width: 460px;
+	}
+}
+
+@media (max-width: 1121px) {
+	.SearchBarWrapper {
+        display: flex;
+        align-items: center;
+		height: 70px;
+        top: 0px;
+		left: 0px;
+		right: 0px;
+	}
+}
+
+.SearchBarContainer {
+    overflow: hidden;
+}
+
+@media (min-width: 1120px) {
+    .SearchBarContainer {
+        width: 100%;
+        display: table;
+    }
+}
+
+@media (max-width: 1121px) {
+    .SearchBarAnchor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        height: 70px;
+        width: 100%;
+        overflow-x: hidden;
+        visibility: visible;
+    }
+    .SearchBarContainer {
+        transition: transform 300ms ease-out;
+        display: flex;
+        transform: translate3d(80px, 0, 0);
+        z-index: 210;
+    }
+    /* When Focused */
+    .SearchBarContainer.FocusWithin {
+        transform: translate3d(10px, 0, 0);
+    }
+    .SearchBarContainer.FocusWithin .QuestionMark {
+        display: none;
+    }
+    .SearchBarContainer.FocusWithin .Cancel {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+.Bar {
+    background-color: #ffffff;
+    transition: box-shadow 200ms ease-in;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 48px;
+}
+
+@media (min-width: 1120px) {
+    .Bar:hover {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 4px 12px rgba(26, 26, 29, 0.08);
+    }
+}
+
+@media (min-width: 1120px) {
+    .Bar {
+        display: table-cell;
+        width: 100%;
+        vertical-align: middle;
+    }
+}
+
+@media (max-width: 1121px) {
+    .Bar {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+    }
+}
+
+.WidescreenContainer {
+    width: 100%;
+    height: 100%;
+    padding-left: 12px;
+    padding-right: 4px;
+}
+
+.LabelWrapper {
+    display: table;
+    margin: 0px;
+    padding: 0px;
+    table-layout: fixed;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.SearchBarSpan {
+    position: absolute;
+    display: block;
+    border: 0px;
+    margin: -1px;
+    padding: 0px;
+    height: 1px;
+    width: 1px;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.QuestionMark {
+    padding-top: 3px;
+    padding-left: 5px;
+    padding-right: 10px;
+    width: 39px;
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.InputWrapper {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.InputContainer {
+    overflow: hidden;
+    position: relative;
+}
+
+.Input {
+    background-color: transparent;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+@media (min-width: 1120px) {
+    .Cancel {
+        display: none;
+    }
+}
+
+@media (max-width: 1121px) {
+    .Cancel {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        height: 48px;
+        justify-content: flex-end;
+        opacity: 0;
+        margin-left: 8px;
+        transition: opacity 300ms ease-in 200ms;
+        visibility: hidden;
+    }
+    .Cancel:before {
+        width: 12px;
+        content: " ";
+        display: block;
+    }
+}
+
+.CancelButton {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: normal;
+    color: #484848;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0px;
+    margin-right: 24px;
+    padding: 4px;
+    text-decoration: none;
+    width: auto;
+    min-width: 48px;
+}
+
+.List {
+    background-color: rgb(255,255,255);
+    border: 1px solid #EBEBEB;
+    border-top: 0;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0;
+    margin: 0px;
+    padding: 0px;
+    padding-top: 8px;
+    z-index: 10;
+    opacity: 0;
+    animation: FadeIn ease 350ms;
+    margin-left: 18px;
+    width: 460px !important;
+    top: 56px !important;
+}
+
+@media (max-width: 1121px) {
+    .List {
+        position: absolute;
+        padding: 0;
+        left: 0px;
+        top: 100%;
+        right: 0px;
+        max-height: calc(100vh - 64px);
+        overflow: auto;
+        border: none;
+        margin-left: 0px;
+        top: 70px !important;
+        width: 100vw !important;
+    }
+}
+
+@media (min-width: 1120px) {
+    .List {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+    }
+}
+
+.RecentSearchesWrapper {
+    opacity: 0;
+    transition: opacity 300ms linear 266ms;
+    border-top: 1px solid #EBEBEB;
+}
+
+.RecentSearchesContainer {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.RecentSearches {
+    margin: 16px 24px;
+}
+
+.RecentSearches small {
+    overflow-wrap: break-word;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: normal;
+    color: rgb(72, 72, 72);
+    font-weight: 600;
+    margin: 0px;
+}
+
+.RecentSearches span {
+    text-transform: uppercase;
+}
+
+.SearchResultsWrapper {
+    margin: 0px 0px 16px;
+    padding: 0px;
+}
+
+.Show {
+    background-color: rgba(255,255,255,1);
+    opacity: 1;
+    overflow: visible;
+    visibility: visible;
+}
+
+.List.Show {
+    box-shadow: 0 15px 46px -10px rgba(26, 26, 29, 0.3);
+}
+
+@keyframes FadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

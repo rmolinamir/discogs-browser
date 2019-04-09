@@ -37,12 +37,13 @@ const searchResults = (props) => {
   const [areResultsLoading, setResultsLoading] = React.useState(true)
 
   const scrollToTop = () => {
+    console.log('inside scrollToTop')
     if (myContainer && myContainer.current) {
       const currentScrollPosition = window.pageYOffset
-      const desiredScrollPosition = myContainer.current.offsetTop - 56
+      const desiredScrollPosition = myContainer.current.offsetTop
       if (currentScrollPosition > desiredScrollPosition) {
-        window.scroll({
-          top: desiredScrollPosition, // -64 to account for the margin and padding on top.
+        window.scrollTo({
+          top: desiredScrollPosition,
           left: 0,
           behavior: 'smooth'
         })

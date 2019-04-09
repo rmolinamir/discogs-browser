@@ -11,13 +11,14 @@
     "react-lazy-load-image-component": "^1.3.2",
     "react-paginate": "^6.3.0",
     "react-png-button": "^1.0.4",
-    "react-png-modal": "^2.1.1",
+    "react-png-modal": "^2.1.2",
     "react-png-tooltip": "^1.2.0",
-    "react-redux": "^6.0.1",
+    "react-redux": "^7.0.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-svg-library": "^1.3.0",
     "redux-saga": "^1.0.2",
+    "smoothscroll-polyfill": "^0.4.4",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {

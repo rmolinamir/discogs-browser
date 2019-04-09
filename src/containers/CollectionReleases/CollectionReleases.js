@@ -40,10 +40,10 @@ const collectionReleases = (props) => {
   const scrollToTop = () => {
     if (myContainer && myContainer.current) {
       const currentScrollPosition = window.pageYOffset
-      const desiredScrollPosition = myContainer.current.offsetTop - 56
+      const desiredScrollPosition = myContainer.current.offsetTop
       if (currentScrollPosition > desiredScrollPosition) {
         window.scroll({
-          top: desiredScrollPosition, // -64 to account for the margin and padding on top.
+          top: desiredScrollPosition,
           left: 0,
           behavior: 'smooth'
         })
