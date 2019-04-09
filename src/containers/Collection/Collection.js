@@ -7,7 +7,6 @@ import { collectionCreators } from '../../store/actions'
 import collectionImage from '../../assets/images/collection-image.jpg'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 // JSX
-import { withErrorHandler } from '../../hoc/ErrorHandler/withErrorHandler'
 import {
   Wrapper,
   Container,
@@ -81,4 +80,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default withErrorHandler(connect(null, mapDispatchToProps)(userCollection), collection)
+export default connect(null, mapDispatchToProps)(userCollection)

@@ -56,21 +56,29 @@ const collectionReleases = (props) => {
      * to reduce the amount of unnecessary requests.
      */
     cancel && cancel('New page selected by the user.')
+    await setReleasesLoading(true)
     if (paginationData) {
-      await setReleasesLoading(true)
-      await scrollToTop()
-      const response = await collection.get(`/${allId}/releases`, {
-        params: {
-          page: selectedPage
-        },
-        cancelToken: new CancelToken(function executor(c) {
-          // An executor function receives a cancel function as a parameter
-          cancel = c
+      try {
+        await scrollToTop()
+        // Delay 1000ms, for a bit of smoothness.
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        const response = await collection.get(`/${allId}/releases`, {
+          params: {
+            page: selectedPage
+          },
+          cancelToken: new CancelToken(function executor(c) {
+            // An executor function receives a cancel function as a parameter
+            cancel = c
+          })
         })
-      })
-      await props.setCollection && props.setCollection(response.data)
-      await setCurrentPage(selectedPage)
-      await setReleasesLoading(false)
+        if (response.data) {
+          await props.setCollection && props.setCollection(response.data)
+          await setCurrentPage(selectedPage)
+          await setReleasesLoading(false)
+        }
+      } catch {
+        await setReleasesLoading(false)
+      }
     }
   }
 

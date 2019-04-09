@@ -37,7 +37,6 @@ const searchResults = (props) => {
   const [areResultsLoading, setResultsLoading] = React.useState(true)
 
   const scrollToTop = () => {
-    console.log('inside scrollToTop')
     if (myContainer && myContainer.current) {
       const currentScrollPosition = window.pageYOffset
       const desiredScrollPosition = myContainer.current.offsetTop
@@ -57,22 +56,30 @@ const searchResults = (props) => {
      * If `cancel` exists, it means there is a promise pending. It is best to cancel it
      * to reduce the amount of unnecessary requests.
      */
-    cancel && cancel('New page selected by the user.')
+    cancel && await cancel('New page selected by the user.')
+    await setResultsLoading(true)
     if (paginationData) {
-      await setResultsLoading(true)
-      await scrollToTop()
-      const response = await fetch.get('', {
-        params: {
-          ...props.searchParams,
-          page: selectedPage
-        },
-        cancelToken: new CancelToken(function executor(c) {
-          // An executor function receives a cancel function as a parameter
-          cancel = c
+      try {
+        await scrollToTop()
+        // Delay 1000ms, for a bit of smoothness.
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        const response = await fetch.get('', {
+          params: {
+            ...props.searchParams,
+            page: selectedPage
+          },
+          cancelToken: new CancelToken(function executor(c) {
+            // An executor function receives a cancel function as a parameter
+            cancel = c
+          })
         })
-      })
-      await props.updateSearch && props.updateSearch(response.data)
-      await setResultsLoading(false)
+        if (response.data) {
+          await props.updateSearch && props.updateSearch(response.data)
+          await setResultsLoading(false)
+        }
+      } catch {
+        await setResultsLoading(false)
+      }
     }
   }
 

@@ -3,6 +3,8 @@ import { toast } from 'react-toastify'
 
 /**
  * Handles 429 errors.
+ * **Possible improvements:** transform into a singleton component, generate a single instance and manage only 1 warning at a time
+ * to not clutter the UI.
  */
 export const withErrorHandler = (WrappedComponent, axios) => {
   return (props) => {

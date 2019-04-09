@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { searchCreators } from '../../store/actions'
 import landingImage from '../../assets/images/landing-image.jpg'
 // JSX
-import { withErrorHandler } from '../../hoc/ErrorHandler/withErrorHandler'
 import {
   Wrapper,
   Container,
@@ -118,4 +117,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default withErrorHandler(connect(null, mapDispatchToProps)(landing), fetch)
+export default connect(null, mapDispatchToProps)(landing)
