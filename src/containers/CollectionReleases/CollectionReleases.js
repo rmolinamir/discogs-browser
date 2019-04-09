@@ -1,11 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import collection, { allId } from '../../collection/axios'
 import { collectionCreators } from '../../store/actions'
 import loadingSVG from '../../assets/images/loading.svg'
 // JSX
-import { 
+import {
   Wrapper,
   Loading,
   Title,
@@ -84,7 +85,7 @@ const collectionReleases = (props) => {
           instance_id={release.instance_id}
           pageCount={paginationData && paginationData.pages}
           currentPage={currentPage}
-          {...release.basic_information}/>
+          {...release.basic_information} />
       )
     })
   }
@@ -92,7 +93,7 @@ const collectionReleases = (props) => {
   const searchReleases = props.releases && props.releases.length && setReleases(props.releases)
 
   const placeholderReleases = React.useMemo(() => {
-    const emptyArray = Array.from(new Array(16))
+    const emptyArray = Array.from(new Array(20))
     return emptyArray.map((_, index) => {
       return (
         <Release
@@ -115,7 +116,7 @@ const collectionReleases = (props) => {
    * If so, then the pagination component will be updated appropriately.
    */
   React.useEffect(() => {
-    if (Boolean(props.pagination)) {
+    if (props.pagination) {
       const { pagination } = props
       setCurrentPage(props.pagination.page) // Update the selected page
       paginationDataHandler(pagination)
@@ -136,9 +137,9 @@ const collectionReleases = (props) => {
       {paginationData ? (
         <>
           {/* Depending on the route, the title will be different. */}
-          <Title>Your collection</Title>  
+          <Title>Your collection</Title>
           <ReactPaginate
-            pageCount={paginationData && paginationData.pages || 0}
+            pageCount={(paginationData && paginationData.pages) || 0}
             forcePage={currentPage - 1}
             marginPagesDisplayed={2}
             pageRangeDisplayed={4}
@@ -174,8 +175,7 @@ const collectionReleases = (props) => {
            * Only show the placeholder elements if the results are being fetched either by the form, or by
            * changing pages.
            */
-          areReleasesLoading || props.isLoading ?
-          (
+          areReleasesLoading || props.isLoading ? (
             <Releases>
               {placeholderReleases}
             </Releases>
@@ -196,17 +196,26 @@ const collectionReleases = (props) => {
   )
 }
 
+collectionReleases.propTypes = {
+  setCollection: PropTypes.func,
+  releases: PropTypes.array,
+  length: PropTypes.string,
+  pagination: PropTypes.object,
+  page: PropTypes.string,
+  isLoading: PropTypes.bool
+}
+
 const mapStateToProps = (state) => {
-	return {
+  return {
     pagination: state.collectionReducer && state.collectionReducer.pagination,
     releases: state.collectionReducer && state.collectionReducer.releases
-	}
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return {
-		setCollection: (data) => dispatch(collectionCreators.setCollection(data))
-	}
+  return {
+    setCollection: (data) => dispatch(collectionCreators.setCollection(data))
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(collectionReleases)

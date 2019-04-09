@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import image_not_found from '../../../assets/images/not_found_image.svg'
+import imageNotFound from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
 import collection, { uncategorizedId, byRelease } from '../../../collection/axios'
 // CSS
@@ -78,7 +80,7 @@ const result = (props) => {
         })
       })
       // Delay 500ms, for a bit of smoothness.
-      await new Promise(_ => setTimeout(_, 500))
+      await new Promise(resolve => setTimeout(resolve, 500))
       await setResultInstanceId(response.data.instance_id)
       await setSettingCollection(false)
     } catch {
@@ -89,7 +91,7 @@ const result = (props) => {
   const removeFromCollection = async () => {
     await setSettingCollection(true)
     try {
-      const instanceId = resultInstanceId ? resultInstanceId : id
+      const instanceId = resultInstanceId || id
       await collection.delete(`/${uncategorizedId}/releases/${id}/instances/${instanceId}`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
@@ -97,11 +99,10 @@ const result = (props) => {
         })
       })
       // Delay 500ms, for a bit of smoothness.
-      await new Promise(_ => setTimeout(_, 500))
+      await new Promise(resolve => setTimeout(resolve, 500))
       await setResultInstanceId(undefined)
       await setSettingCollection(false)
-    }
-    catch {
+    } catch {
       await setSettingCollection(false)
     }
   }
@@ -116,7 +117,7 @@ const result = (props) => {
      * to reduce the amount of unnecessary requests.
      */
     cancel && cancel('New collection request made by the user.')
-    switch(Boolean(resultInstanceId)) {
+    switch (Boolean(resultInstanceId)) {
       case true:
         removeFromCollection()
         break
@@ -155,7 +156,7 @@ const result = (props) => {
    * Sets the instanceId after `props.collectionReleases` has been set in the redux store.
    */
   React.useEffect(() => {
-    if (Boolean(props.collectionReleases.length)) {
+    if (props.collectionReleases && props.collectionReleases.length) {
       setSettingCollection(false)
       getInstanceId()
     }
@@ -197,7 +198,7 @@ const result = (props) => {
             effect='blur'
             width={'100%'}
             height={205}
-            alt={image_not_found}
+            alt={imageNotFound}
             placeholderSrc={props.placeholder || thumb}
             src={cover_image}
             wrapperClassName='gallery-img-wrapper' />
@@ -209,18 +210,18 @@ const result = (props) => {
           {/* Protection for  empty objects. */}
           {community && (
             <>
-            <Community style={{
+              <Community style={{
                 color: '#EDCE21'
               }}>
-              <span>{community.have}</span>
-              <Icon icon='bullet-checkmark-no-bg' />
-            </Community>
-            <Community style={{
+                <span>{community.have}</span>
+                <Icon icon='bullet-checkmark-no-bg' />
+              </Community>
+              <Community style={{
                 color: '#C45A5A'
               }}>
-              <span>{community.want}</span>
-              <Icon icon='like' />
-            </Community>
+                <span>{community.want}</span>
+                <Icon icon='like' />
+              </Community>
             </>
           )}
         </Container>
@@ -229,10 +230,24 @@ const result = (props) => {
   )
 }
 
+result.propTypes = {
+  community: PropTypes.object,
+  cover_image: PropTypes.string,
+  id: PropTypes.number,
+  master_url: PropTypes.string,
+  thumb: PropTypes.string,
+  title: PropTypes.string,
+  user_data: PropTypes.object,
+  year: PropTypes.string,
+  type: PropTypes.string,
+  collectionReleases: PropTypes.array,
+  placeholder: PropTypes.string
+}
+
 const mapStateToProps = (state) => {
-	return {
+  return {
     collectionReleases: state.collectionReducer && state.collectionReducer.releases
-	}
+  }
 }
 
 export default connect(mapStateToProps)(result)

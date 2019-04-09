@@ -118,6 +118,7 @@ export const Releases = styled.div`
   grid-auto-flow: row dense;
   width: 95%;
   margin: 0 auto;
+  overflow: hidden;
 `
 
 export const Release = styled.div`

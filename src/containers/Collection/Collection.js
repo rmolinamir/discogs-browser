@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import axios from 'axios'
 import collection, { allId } from '../../collection/axios'
 import { connect } from 'react-redux'
@@ -17,7 +18,7 @@ import CollectionReleases from '../CollectionReleases/CollectionReleases'
 const CancelToken = axios.CancelToken
 let cancel
 
-const component = (props) => {
+const userCollection = (props) => {
   const [isLoading, setIsLoading] = React.useState(false)
 
   const fetchCollection = async () => {
@@ -26,13 +27,13 @@ const component = (props) => {
       const response = await collection.get(`/${allId}/releases`, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       props.setCollection && await props.setCollection(response.data)
       await setIsLoading(false)
     } catch (error) {
-      await console.error(error);
+      await console.error(error)
       await setIsLoading(false)
     }
   }
@@ -58,10 +59,14 @@ const component = (props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setCollection: (data) => dispatch(collectionCreators.setCollection(data))
-	}
+userCollection.propTypes = {
+  setCollection: PropTypes.func
 }
 
-export default connect(null, mapDispatchToProps)(component)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCollection: (data) => dispatch(collectionCreators.setCollection(data))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(userCollection)

@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import image_not_found from '../../../assets/images/not_found_image.svg'
+import imageNotFound from '../../../assets/images/not_found_image.svg'
 import axios from 'axios'
 import collection, { uncategorizedId, allId } from '../../../collection/axios'
 import { collectionCreators } from '../../../store/actions'
@@ -80,12 +82,10 @@ const release = (props) => {
       })
       await setModalOpen(false)
       // Delay 200ms, for a bit of smoothness and let the modal close.
-      await new Promise(_ => setTimeout(_, 100))
-      await console.log('response data', response.data)
+      await new Promise(resolve => setTimeout(resolve, 100))
       await setCollection && setCollection(response.data)
       // At this point, the component unmounts.
-    }
-    catch {
+    } catch {
       await setSettingCollection(false)
     }
   }
@@ -139,7 +139,7 @@ const release = (props) => {
             effect='blur'
             width={'100%'}
             height={205}
-            alt={image_not_found}
+            alt={imageNotFound}
             placeholderSrc={props.placeholder || thumb}
             src={cover_image}
             wrapperClassName='gallery-img-wrapper' />
@@ -154,11 +154,24 @@ const release = (props) => {
   )
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setCollection: (data) => dispatch(collectionCreators.setCollection(data))
-	}
+release.propTypes = {
+  cover_image: PropTypes.string,
+  id: PropTypes.number,
+  thumb: PropTypes.string,
+  title: PropTypes.string,
+  year: PropTypes.number,
+  currentPage: PropTypes.number,
+  pageCount: PropTypes.number,
+  totalReleases: PropTypes.number,
+  setCollection: PropTypes.func,
+  instance_id: PropTypes.number,
+  placeholder: PropTypes.string
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCollection: (data) => dispatch(collectionCreators.setCollection(data))
+  }
+}
 
 export default connect(null, mapDispatchToProps)(release)

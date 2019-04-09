@@ -7,17 +7,17 @@ export const searchActions = {
   setSearch: (action) => {
     const { searchQuery, searchParams, data } = action
     return {
-        type: actionTypes.SEARCH_SET_SEARCH,
-        searchParams,
-        searchQuery,
-        data
+      type: actionTypes.SEARCH_SET_SEARCH,
+      searchParams,
+      searchQuery,
+      data
     }
   },
   updateSearch: (action) => {
     const { data } = action
     return {
-        type: actionTypes.SEARCH_UPDATE_SEARCH,
-        data
+      type: actionTypes.SEARCH_UPDATE_SEARCH,
+      data
     }
   }
 }

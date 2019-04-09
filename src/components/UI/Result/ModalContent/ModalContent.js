@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 import React from 'react'
+import PropTypes from 'prop-types'
 import axios from 'axios'
-import image_not_found from '../../../../assets/images/not_found_image.svg'
+import imageNotFound from '../../../../assets/images/not_found_image.svg'
 // CSS
 import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
@@ -59,20 +61,20 @@ const modalContent = (props) => {
      */
     cancel && cancel('New search done by the user.')
     try {
-      const response =  master_url && await axios.get(master_url, {
+      const response = master_url && await axios.get(master_url, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       const data = await {
-        community: response&& response.data && response.data.community,
+        community: response && response.data && response.data.community,
         tracklist: response && response.data.tracklist && response.data.tracklist[0],
         video: response && response.data.videos && response.data.videos[0]
       }
       await setData(data)
-      // Delay 1000ms, for a bit of smoothness.
-      await new Promise(_ => setTimeout(_, 1000))
+      // Delay 200ms, for a bit of smoothness.
+      await new Promise(resolve => setTimeout(resolve, 200))
       await setIsLoading(false)
     } catch {
       await setIsLoading(false)
@@ -84,7 +86,7 @@ const modalContent = (props) => {
     const match = url.match(regExp)
 
     if (match && match[2].length === 11) {
-        return match[2]
+      return match[2]
     }
   }
 
@@ -101,7 +103,7 @@ const modalContent = (props) => {
     iframe.contentWindow && iframe.contentWindow.postMessage && iframe.contentWindow.postMessage(
       JSON.stringify({
         event: 'command',
-        func: 'stopVideo',
+        func: 'stopVideo'
       }),
       '*'
     )
@@ -142,12 +144,12 @@ const modalContent = (props) => {
                 effect='blur'
                 width='100%'
                 height='100%'
-                alt={image_not_found}
+                alt={imageNotFound}
                 placeholderSrc={props.placeholder || thumb}
                 src={cover_image}
                 wrapperClassName='gallery-img-wrapper' />
             </StyledImage>
-            </ImageContainer>
+          </ImageContainer>
         </Cover>
         <Container>
           <Header>
@@ -174,7 +176,7 @@ const modalContent = (props) => {
             <Text>Style: <span>{style.join(', ')}.</span></Text>
           ) : null}
           {/**
-           * This button handles adding or removing the result from the collection. 
+           * This button handles adding or removing the result from the collection.
            * Only render this button if the `type` of the result is a `master` or a `release`.
           */}
           {Boolean(type === 'release' || type === 'master') && (
@@ -197,18 +199,18 @@ const modalContent = (props) => {
           {/* Protection for  empty objects. */}
           {community && (
             <div>
-            <Community style={{
+              <Community style={{
                 color: '#EDCE21'
               }}>
-              <span>{community.have}</span>
-              <Icon icon='bullet-checkmark-no-bg' />
-            </Community>
-            <Community style={{
+                <span>{community.have}</span>
+                <Icon icon='bullet-checkmark-no-bg' />
+              </Community>
+              <Community style={{
                 color: '#C45A5A'
               }}>
-              <span>{community.want}</span>
-              <Icon icon='like' />
-            </Community>
+                <span>{community.want}</span>
+                <Icon icon='like' />
+              </Community>
             </div>
           )}
           {/* The rest of the information is only loaded if master_url exist. */}
@@ -223,18 +225,18 @@ const modalContent = (props) => {
             <FadeIn>
               {/* Only display the following components, if their respective information exists. */}
               {data.community && data.community.rating && (
-              <Rating>
-                Community rating:
-                <div>
-                  {/* Needs to be dismounted to avoid clipPath conflicts. */}
-                  {props.open && (
-                    <Icon
-                      clipPathFill={Number(data.community.rating.average / 5) + 0.01}
-                      icon='star-icon' />
-                  )}
-                  <span>{Number(data.community.rating.average).toFixed(0)} / 5</span>
-                </div>
-              </Rating>
+                <Rating>
+                  Community rating:
+                  <div>
+                    {/* Needs to be dismounted to avoid clipPath conflicts. */}
+                    {props.open && (
+                      <Icon
+                        clipPathFill={Number(data.community.rating.average / 5) + 0.01}
+                        icon='star-icon' />
+                    )}
+                    <span>{Number(data.community.rating.average).toFixed(0)} / 5</span>
+                  </div>
+                </Rating>
               )}
               {data.tracklist && data.tracklist.duration && (
                 <Text>Duration: <span>{data.tracklist.duration}</span></Text>
@@ -267,6 +269,26 @@ const modalContent = (props) => {
       )}
     </>
   )
+}
+
+modalContent.propTypes = {
+  community: PropTypes.object,
+  country: PropTypes.string,
+  cover_image: PropTypes.string,
+  format: PropTypes.array,
+  genre: PropTypes.array,
+  label: PropTypes.array,
+  master_url: PropTypes.string,
+  style: PropTypes.array,
+  thumb: PropTypes.string,
+  title: PropTypes.string,
+  year: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  open: PropTypes.bool,
+  collectionHandler: PropTypes.func,
+  isResultInCollection: PropTypes.bool,
+  isSettingCollection: PropTypes.bool
 }
 
 export default React.memo(modalContent)

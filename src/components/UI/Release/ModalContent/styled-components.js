@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import image_not_found from '../../../../assets/images/not_found_image.svg'
+import imageNotFound from '../../../../assets/images/not_found_image.svg'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -39,7 +39,7 @@ export const ImageContainer = styled.div`
 export const StyledImage = styled.span`
   display: inline-block;
   position: relative;
-  background-image: url(${image_not_found});
+  background-image: url(${imageNotFound});
   background-size: 100% 100%;
   color: transparent;
   width: 100%;

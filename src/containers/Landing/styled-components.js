@@ -4,7 +4,6 @@ import styled from 'styled-components'
 export const Wrapper = styled.main`
   width: 100%;
   min-height: 105%;
-  ${'' /* max-width: 1024px; */}
   margin: 0 auto;
   color: #383838;
   background: #FFF;

@@ -9,12 +9,12 @@ const updateObject = (oldObject, updatedObject) => {
 
 const initialState = {
   pagination: {},
-  releases: {},
+  releases: []
 }
 
 export const collectionReducer = (state = initialState, action) => {
   const { pagination, releases } = action
-  switch(action.type) {
+  switch (action.type) {
     case types.COLLECTION_SET_COLLECTION:
       return updateObject(state, {
         pagination: pagination,

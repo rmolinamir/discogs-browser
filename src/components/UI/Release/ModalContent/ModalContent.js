@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 import React from 'react'
+import PropTypes from 'prop-types'
 import axios from 'axios'
-import image_not_found from '../../../../assets/images/not_found_image.svg'
+import imageNotFound from '../../../../assets/images/not_found_image.svg'
 // CSS
 import 'react-lazy-load-image-component/src/effects/blur.css'
 // JSX
@@ -49,21 +51,20 @@ const modalContent = (props) => {
      */
     cancel && cancel('New search done by the user.')
     try {
-      const response =  master_url && await axios.get(master_url, {
+      const response = master_url && await axios.get(master_url, {
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       const data = await {
-        community: response&& response.data && response.data.community,
+        community: response && response.data && response.data.community,
         tracklist: response && response.data.tracklist && response.data.tracklist[0],
         video: response && response.data.videos && response.data.videos[0]
       }
       await setData(data)
-      await console.log('fetchData data', data)
       // Delay 1000ms, for a bit of smoothness.
-      await new Promise(_ => setTimeout(_, 1000))
+      await new Promise(resolve => setTimeout(resolve, 200))
       await setIsLoading(false)
     } catch {
       await setIsLoading(false)
@@ -75,7 +76,7 @@ const modalContent = (props) => {
     const match = url.match(regExp)
 
     if (match && match[2].length === 11) {
-        return match[2]
+      return match[2]
     }
   }
 
@@ -92,7 +93,7 @@ const modalContent = (props) => {
     iframe.contentWindow && iframe.contentWindow.postMessage && iframe.contentWindow.postMessage(
       JSON.stringify({
         event: 'command',
-        func: 'stopVideo',
+        func: 'stopVideo'
       }),
       '*'
     )
@@ -133,12 +134,12 @@ const modalContent = (props) => {
                 effect='blur'
                 width='100%'
                 height='100%'
-                alt={image_not_found}
+                alt={imageNotFound}
                 placeholderSrc={props.placeholder || thumb}
                 src={cover_image}
                 wrapperClassName='gallery-img-wrapper' />
             </StyledImage>
-            </ImageContainer>
+          </ImageContainer>
         </Cover>
         <Container>
           <Header>
@@ -147,7 +148,7 @@ const modalContent = (props) => {
           </Header>
           <Divider height='24px' />
           {/**
-           * This button handles adding or removing the release from the collection. 
+           * This button handles adding or removing the release from the collection.
            * Only render this button if the `type` of the release is a `master` or a `release`.
           */}
           <Button
@@ -206,6 +207,18 @@ const modalContent = (props) => {
       )}
     </>
   )
+}
+
+modalContent.propTypes = {
+  cover_image: PropTypes.string,
+  master_url: PropTypes.string,
+  thumb: PropTypes.string,
+  title: PropTypes.string,
+  placeholder: PropTypes.string,
+  open: PropTypes.bool,
+  collectionHandler: PropTypes.func,
+  isSettingCollection: PropTypes.bool,
+  isReleaseInCollection: PropTypes.bool
 }
 
 export default React.memo(modalContent)

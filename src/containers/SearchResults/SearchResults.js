@@ -1,11 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import fetch from '../../fetch/axios'
 import { searchCreators } from '../../store/actions'
 import loadingSVG from '../../assets/images/loading.svg'
 // JSX
-import { 
+import {
   Wrapper,
   Loading,
   Title,
@@ -66,7 +67,7 @@ const searchResults = (props) => {
         },
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       await props.updateSearch && props.updateSearch(response.data)
@@ -87,7 +88,7 @@ const searchResults = (props) => {
   const searchResults = props.data && props.data.results && setResults(props.data.results)
 
   const placeholderResults = React.useMemo(() => {
-    const emptyArray = Array.from(new Array(16))
+    const emptyArray = Array.from(new Array(20))
     return emptyArray.map((_, index) => {
       return (
         <Result
@@ -110,7 +111,7 @@ const searchResults = (props) => {
    * If so, then the pagination component will be updated appropriately.
    */
   React.useEffect(() => {
-    if (Boolean(props.data && props.data.pagination && props.data.results)) {
+    if (props.data && props.data.pagination && props.data.results) {
       const { pagination } = props.data
       paginationDataHandler(pagination)
     }
@@ -130,7 +131,7 @@ const searchResults = (props) => {
       {props.searchQuery ? (
         <>
           {/* Depending on the route, the title will be different. */}
-          <Title>Search results for: <span>{props.searchQuery}</span></Title>  
+          <Title>Search results for: <span>{props.searchQuery}</span></Title>
           <ReactPaginate
             pageCount={paginationData && paginationData.pages}
             marginPagesDisplayed={2}
@@ -167,8 +168,7 @@ const searchResults = (props) => {
            * Only show the placeholder elements if the results are being fetched either by the form, or by
            * changing pages.
            */
-          areResultsLoading || props.isLoading ?
-          (
+          areResultsLoading || props.isLoading ? (
             <Results>
               {placeholderResults}
             </Results>
@@ -189,18 +189,26 @@ const searchResults = (props) => {
   )
 }
 
+searchResults.propTypes = {
+  searchParams: PropTypes.object,
+  updateSearch: PropTypes.func,
+  data: PropTypes.object,
+  isLoading: PropTypes.bool,
+  searchQuery: PropTypes.string
+}
+
 const mapStateToProps = (state) => {
-	return {
+  return {
     searchQuery: state.searchesReducer && state.searchesReducer.searchQuery,
     searchParams: state.searchesReducer && state.searchesReducer.searchParams,
     data: state.searchesReducer && state.searchesReducer.data
-	}
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return {
-		updateSearch: (data) => dispatch(searchCreators.updateSearch(data))
-	}
+  return {
+    updateSearch: (data) => dispatch(searchCreators.updateSearch(data))
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(searchResults)

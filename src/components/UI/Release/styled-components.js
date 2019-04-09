@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import image_not_found from '../../../assets/images/not_found_image.svg'
+import imageNotFound from '../../../assets/images/not_found_image.svg'
 
 export const Title = styled.div`
   padding: 0 0 3px;
@@ -16,7 +16,7 @@ export const Release = styled.div`
   position: relative;
   max-width: 225px;
   width: 100%;
-  height: 285px;
+  height: auto;
   margin: 0 auto;
 
   :hover span {
@@ -61,7 +61,7 @@ export const MoreInformation = styled.div`
 export const StyledImage = styled.span`
   display: inline-block;
   position: relative;
-  background-image: url(${image_not_found});
+  background-image: url(${imageNotFound});
   background-size: 100% 100%;
   color: transparent;
   width: 100%;

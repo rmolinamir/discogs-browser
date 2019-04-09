@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import axios from 'axios'
 import fetch from '../../fetch/axios'
 import { connect } from 'react-redux'
@@ -33,7 +34,7 @@ const landing = (props) => {
     // Only fetch if any of them exist.
     if (params.artist || params.track) {
       fetchResults(params)
-    } 
+    }
   }
 
   const fetchResults = async (params) => {
@@ -45,13 +46,13 @@ const landing = (props) => {
         },
         cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
-          cancel = c;
+          cancel = c
         })
       })
       props.setSearch && await props.setSearch(params, response.data)
       await setIsLoading(false)
     } catch (error) {
-      await console.log(error);
+      await console.log(error)
       await setIsLoading(false)
     }
   }
@@ -95,10 +96,14 @@ const landing = (props) => {
   )
 }
 
+landing.propTypes = {
+  setSearch: PropTypes.func
+}
+
 const mapDispatchToProps = (dispatch) => {
-	return {
-		setSearch: (params, data) => dispatch(searchCreators.setSearch(params, data))
-	}
+  return {
+    setSearch: (params, data) => dispatch(searchCreators.setSearch(params, data))
+  }
 }
 
 export default connect(null, mapDispatchToProps)(landing)

@@ -10,12 +10,12 @@ const updateObject = (oldObject, updatedObject) => {
 const initialState = {
   searchQuery: undefined,
   searchParams: {},
-  data: {},
+  data: {}
 }
 
 export const searchesReducer = (state = initialState, action) => {
   const { searchQuery, searchParams, data } = action
-  switch(action.type) {
+  switch (action.type) {
     case types.SEARCH_SET_SEARCH:
       return updateObject(state, {
         searchQuery: searchQuery,
