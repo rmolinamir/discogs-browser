@@ -154,7 +154,7 @@ export const NoResults = styled.div`
   background: #DC3545;
   font-size: 21px;
   border-radius: 6px;
-  margin: 0 auto 21px;
+  margin: 0 auto 100vh;
   width: 95%;
   text-align: center;
   overflow: hidden;

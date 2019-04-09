@@ -174,7 +174,7 @@ const searchResults = (props) => {
               {placeholderResults}
             </Results>
           ) : (
-            searchResults.length ? (
+            searchResults && searchResults.length ? (
               <Results>
                 {searchResults}
               </Results>
