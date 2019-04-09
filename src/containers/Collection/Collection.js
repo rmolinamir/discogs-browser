@@ -4,10 +4,14 @@ import axios from 'axios'
 import collection, { allId } from '../../collection/axios'
 import { connect } from 'react-redux'
 import { collectionCreators } from '../../store/actions'
+import collectionImage from '../../assets/images/collection-image.jpg'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 // JSX
 import {
   Wrapper,
   Container,
+  Background,
+  ImageWrapper,
   Title
 } from './styled-components'
 import CollectionReleases from '../CollectionReleases/CollectionReleases'
@@ -52,7 +56,14 @@ const userCollection = (props) => {
   return (
     <Wrapper>
       <Container>
-        <Title>Search for anything in Discogs' largest online music database on the web</Title>
+        <Background>
+          <ImageWrapper>
+            <LazyLoadImage
+              alt=''
+              src={collectionImage} />
+          </ImageWrapper>
+          <Title>My <span>collection</span></Title>
+        </Background>
         <CollectionReleases isLoading={isLoading} />
       </Container>
     </Wrapper>

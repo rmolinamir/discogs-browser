@@ -187,7 +187,7 @@ const modalContent = (props) => {
               blockButton
               onClick={props.collectionHandler}
               disabled={props.isSettingCollection}
-              button={!props.isResultInCollection ? 'primary' : 'danger'}>
+              button={!props.isResultInCollection ? 'success' : 'danger'}>
               {props.isSettingCollection ? (
                 <Icon icon='loading-one' />
               ) : (

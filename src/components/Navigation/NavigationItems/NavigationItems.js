@@ -15,7 +15,6 @@ import Divider from './Divider/Divider'
 import NavigationItem from './NagivationItem/NagivationItem'
 
 const Children = (props) => {
-  console.log(props)
   switch (props.navbarType) {
     case 'MobileDrawer':
       return props.width < 1121 ? null : (

@@ -21,8 +21,8 @@ export const Wrapper = styled.section`
     padding: 12px 9px;
     box-shadow: -1px 2px 3px rgba(0,0,0,.16), 1px 2px 3px rgba(0,0,0,.53);
     margin: 0 auto;
-    background-color: #8DC3F4;
-    color: #FFF;
+    background-color: #2F2F2F;
+    color: #FFF7F7;
     width: 100%;
     justify-content: space-between;
     align-items: center;
@@ -56,7 +56,7 @@ export const Wrapper = styled.section`
   .active,
   .pagination .break {
     font-size: 14px !important;
-    color: #0062b3;
+    color: #DC3545;
     font-weight: bold;
     min-width: 32px;
     min-height: 32px;
@@ -65,33 +65,46 @@ export const Wrapper = styled.section`
 `
 
 export const Title = styled.h2`
-  font-size: 2.25em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 66px;
+  font-size: 2.5em;
   font-weight: normal;
-  text-align: center;
   max-width: 1024px;
-  margin: 24px auto;
+  margin: 36px auto;
+  text-align: center;
 
   span {
+    text-align: center;
+    margin-left: 0.5ch;
     font-weight: bold;
+  }
+
+  @media (max-width: 744px) {
+    flex-flow: column;
+    margin: 12px auto;
+    height: 114px;
   }
 `
 
 export const Loading = styled.div`
-  margin: 0 auto; 
-  width: 25vmin;
-  height: 25vmin;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 138px;
 `
 
 export const NextButton = styled.span`
   display: flex;
   font-size: 2em;
-  color: #0062b3;
+  color: #DC3545;
 `
 
 export const PrevButton = styled.span`
   display: flex;
   font-size: 2em;
-  color: #0062b3;
+  color: #DC3545;
 
 
   svg {
@@ -107,7 +120,7 @@ export const PrevButton = styled.span`
 export const Container = styled.div`
   align-items: center;
   position: relative;
-  margin: 56px 0 24px;
+  margin: 0px 0 24px;
   padding: 8px 0px;
 `
 
@@ -137,8 +150,8 @@ export const NoResults = styled.div`
   display: block;
   padding: 18px;
   position: relative;
-  color: #FFF;
-  background: #0062b3;
+  color: #FFF7F7;
+  background: #DC3545;
   font-size: 21px;
   border-radius: 6px;
   margin: 0 auto 21px;

@@ -24,7 +24,7 @@ export const Result = styled.div`
   }
   
   :hover ${Title} {
-    color: #116FFC;
+    color: #DC3545;
   }
 `
 
@@ -46,13 +46,13 @@ export const MoreInformation = styled.div`
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
-  background: rgb(141, 195, 244, 0.5);
+  background: rgba(220, 53, 69, 0.5);
   transition: all 200ms ease-in-out;
 
   svg {
     opacity: 0.8;
     z-index: 1;
-    color: #FFF;
+    color: #FFF7F7;
     width: 80px;
     height: 80px;
   }

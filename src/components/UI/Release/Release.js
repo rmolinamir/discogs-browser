@@ -81,8 +81,8 @@ const release = (props) => {
         })
       })
       await setModalOpen(false)
-      // Delay 200ms, for a bit of smoothness and let the modal close.
-      await new Promise(resolve => setTimeout(resolve, 100))
+      // Delay 300ms, for a bit of smoothness, and to let the modal close.
+      await new Promise(resolve => setTimeout(resolve, 300))
       await setCollection && setCollection(response.data)
       // At this point, the component unmounts.
     } catch {

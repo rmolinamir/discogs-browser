@@ -24,7 +24,7 @@ export const Release = styled.div`
   }
   
   :hover ${Title} {
-    color: #116FFC;
+    color: #DC3545;
   }
 `
 

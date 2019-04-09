@@ -8,6 +8,7 @@ export const Wrapper = styled.section`
   background: inherit;
 
   .disabled {
+    color: #FFF7F7
     opacity: 0.5;
     cursor: not-allowed !important;
     pointer-events: none;
@@ -21,8 +22,8 @@ export const Wrapper = styled.section`
     padding: 12px 9px;
     box-shadow: -1px 2px 3px rgba(0,0,0,.16), 1px 2px 3px rgba(0,0,0,.53);
     margin: 0 auto;
-    background-color: #8DC3F4;
-    color: #FFF;
+    background-color: #2F2F2F;
+    color: #FFF7F7;
     width: 100%;
     justify-content: space-between;
     align-items: center;
@@ -56,7 +57,7 @@ export const Wrapper = styled.section`
   .active,
   .pagination .break {
     font-size: 14px !important;
-    color: #0062b3;
+    color: #DC3545;
     font-weight: bold;
     min-width: 32px;
     min-height: 32px;
@@ -64,34 +65,16 @@ export const Wrapper = styled.section`
   }
 `
 
-export const Title = styled.h2`
-  font-size: 2.25em;
-  font-weight: normal;
-  text-align: center;
-  max-width: 1024px;
-  margin: 24px auto;
-
-  span {
-    font-weight: bold;
-  }
-`
-
-export const Loading = styled.div`
-  margin: 0 auto; 
-  width: 25vmin;
-  height: 25vmin;
-`
-
 export const NextButton = styled.span`
   display: flex;
   font-size: 2em;
-  color: #0062b3;
+  color: #DC3545;
 `
 
 export const PrevButton = styled.span`
   display: flex;
   font-size: 2em;
-  color: #0062b3;
+  color: #DC3545;
 
 
   svg {
@@ -137,8 +120,8 @@ export const NoReleases = styled.div`
   display: block;
   padding: 18px;
   position: relative;
-  color: #FFF;
-  background: #0062b3;
+  color: #FFF7F7;
+  background: #DC3545;
   font-size: 21px;
   border-radius: 6px;
   margin: 0 auto 21px;

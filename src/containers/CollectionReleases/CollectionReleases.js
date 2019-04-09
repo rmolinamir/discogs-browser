@@ -8,8 +8,6 @@ import loadingSVG from '../../assets/images/loading.svg'
 // JSX
 import {
   Wrapper,
-  Loading,
-  Title,
   PrevButton,
   NextButton,
   Container,
@@ -134,37 +132,19 @@ const collectionReleases = (props) => {
 
   return (
     <Wrapper>
-      {paginationData ? (
-        <>
-          {/* Depending on the route, the title will be different. */}
-          <Title>Your collection</Title>
-          <ReactPaginate
-            pageCount={(paginationData && paginationData.pages) || 0}
-            forcePage={currentPage - 1}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={4}
-            onPageChange={onPageChangeHandler}
-            previousLabel={<PrevButton><Icon icon='arrow-right' /></PrevButton>}
-            nextLabel={<NextButton><Icon icon='arrow-right' /></NextButton>}
-            breakLabel={'•••'}
-            breakClassName={'break'}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            activeClassName={'active'} />
-        </>
-      ) : (
-        <Loading>
-          <Icon
-            size='100%'
-            animationFill={[
-              '#00407C',
-              '#0364BF',
-              '#0364BF',
-              '#4BA7FC'
-            ]}
-            icon='loading-one' />
-        </Loading>
-      )}
+      <ReactPaginate
+        pageCount={(paginationData && paginationData.pages) || 0}
+        forcePage={currentPage - 1}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={4}
+        onPageChange={onPageChangeHandler}
+        previousLabel={<PrevButton><Icon icon='arrow-right' /></PrevButton>}
+        nextLabel={<NextButton><Icon icon='arrow-right' /></NextButton>}
+        breakLabel={'•••'}
+        breakClassName={'break'}
+        containerClassName={'pagination'}
+        subContainerClassName={'pages pagination'}
+        activeClassName={'active'} />
       <Container ref={myContainer}>
         {isLoading ? (
           <Releases>

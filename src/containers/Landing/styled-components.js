@@ -6,8 +6,18 @@ export const Wrapper = styled.main`
   min-height: 105%;
   margin: 0 auto;
   color: #383838;
-  background: #FFF;
+  background: #FFF7F7;
   position: relative;
+  animation: fade-in 300ms ease-in-out;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `
 
 export const Container = styled.section`
@@ -23,25 +33,55 @@ export const Container = styled.section`
   background: inherit;
 `
 
+export const Background = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  border-bottom: 2px solid #DC3545;
+`
+
+export const ImageWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(47, 47, 47, 0.33);
+  
+  span {
+    display: block !important;
+    height: 100%
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+  }
+`
+
 export const FormContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-flow: column;
   width: 100%;
-  height: 68px;
-  margin: 0 auto;
+  height: 248px;
+  margin: 124px auto;
   position: relative;
   overflow: hidden;
-  border-bottom: 2px solid #0062B3;
   padding: 18px 14px;
-  margin-bottom: 16px;
-  background-color: #8DC3F4;
+  background-color: rgba(47, 47, 47, 0.9);
 
   form {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    max-width: 1024px;
+    max-width: 1240px;
     margin: 0 auto;
   }
 
@@ -54,11 +94,27 @@ export const FormContainer = styled.div`
   form > *:not(button) {
     padding: 0;
   }
+
+  @media (max-width: 744px) {
+    margin: 0 auto;
+    height: auto;
+
+    form {
+      flex-flow: column;
+    }
+
+    form > * {
+      width: 100%;
+      margin: 0 auto 9px !important;
+    }
+  }
 `
 
 export const Title = styled.h1`
-  margin: 0;
-  font-size: 2.5em;
+  color: #FFF7F7;
+  margin: 0 0 24px;
+  font-size: 2em;
   text-align: center;
-  color: inherit;
+  font-weight: normal;
+  user-select: none;
 `

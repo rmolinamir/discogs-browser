@@ -10,3 +10,9 @@
   padding: 18px;
   border-radius: 4px;
 }
+
+@media (max-width: 680px) {
+  .Aesthetics {
+    width: 100%;
+  }
+}

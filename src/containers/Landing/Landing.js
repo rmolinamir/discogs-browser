@@ -4,17 +4,21 @@ import axios from 'axios'
 import fetch from '../../fetch/axios'
 import { connect } from 'react-redux'
 import { searchCreators } from '../../store/actions'
+import landingImage from '../../assets/images/landing-image.jpg'
 // JSX
 import {
   Wrapper,
   Container,
   Title,
+  Background,
+  ImageWrapper,
   FormContainer
 } from './styled-components'
 import { Form, Input } from 'react-formalized'
 import Button from 'react-png-button'
 import SearchResults from '../SearchResults/SearchResults'
 import { Icon } from 'react-svg-library'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 /**
  * Axios cancel token to cancel pending searches if user changes pages too fast.
@@ -69,27 +73,34 @@ const landing = (props) => {
   return (
     <Wrapper>
       <Container>
-        <FormContainer>
-          <Form onSubmit={onSubmitHandler}>
-            <Input
-              identifier='artist'
-              placeholder='Artist' />
-            <Input
-              identifier='track'
-              placeholder='Song' />
-            <Button
-              disabled={isLoading}
-              style={{
-                marginTop: '9px'
-              }}
-              blockButton
-              type='submit'
-              button='danger'>
-              {isLoading ? <Icon size='2em' icon='loading-two' /> : 'Search'}
-            </Button>
-          </Form>
-        </FormContainer>
-        <Title>Search for anything in Discogs' largest online music database on the web</Title>
+        <Background>
+          <ImageWrapper>
+            <LazyLoadImage
+              alt=''
+              src={landingImage} />
+          </ImageWrapper>
+          <FormContainer>
+            <Title>Look anything up in Discogs' largest online music database on the web</Title>
+            <Form onSubmit={onSubmitHandler}>
+              <Input
+                identifier='artist'
+                placeholder='Artist' />
+              <Input
+                identifier='track'
+                placeholder='Song' />
+              <Button
+                disabled={isLoading}
+                style={{
+                  marginTop: '9px'
+                }}
+                blockButton
+                type='submit'
+                button='danger'>
+                {isLoading ? <Icon size='2em' icon='loading-two' /> : 'Search'}
+              </Button>
+            </Form>
+          </FormContainer>
+        </Background>
         <SearchResults isLoading={isLoading} />
       </Container>
     </Wrapper>

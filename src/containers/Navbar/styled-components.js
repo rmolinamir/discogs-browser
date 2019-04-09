@@ -6,10 +6,20 @@ export const Header = styled.header`
   width: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(255,255,255) !important; 
-  border-bottom: 0.5px solid rgba(51,51,51,0.15);
+  background-color: inherit !important; 
+  border-bottom: 2px solid #DC3545;
   box-sizing: border-box;
   z-index: 25;
+  animation: fade-in 200ms ease-in-out;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0
+    }
+    100% {
+      opacity: 1
+    }
+  }
 `
 
 export const Navbar = styled.nav`

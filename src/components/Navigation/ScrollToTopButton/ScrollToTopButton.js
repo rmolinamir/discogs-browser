@@ -7,7 +7,7 @@ import {
 import { Icon } from 'react-svg-library'
 
 const scrollToTopButton = () => {
-  const [isInvisible, setIsInvisible] = React.useState(false)
+  const [isInvisible, setIsInvisible] = React.useState(true)
 
   /**
    * If the current scroll position of the user is less than half of the screen height,

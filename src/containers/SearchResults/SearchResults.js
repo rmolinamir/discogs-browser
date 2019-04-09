@@ -129,34 +129,34 @@ const searchResults = (props) => {
 
   return (
     <Wrapper>
+      <ReactPaginate
+        pageCount={paginationData && paginationData.pages}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={4}
+        onPageChange={onPageChangeHandler}
+        previousLabel={<PrevButton><Icon icon='arrow-right' /></PrevButton>}
+        nextLabel={<NextButton><Icon icon='arrow-right' /></NextButton>}
+        breakLabel={'•••'}
+        breakClassName={'break'}
+        containerClassName={'pagination'}
+        subContainerClassName={'pages pagination'}
+        activeClassName={'active'} />
       {props.searchQuery ? (
         <>
           {/* Depending on the route, the title will be different. */}
           <Title>Search results for: <span>{props.searchQuery}</span></Title>
-          <ReactPaginate
-            pageCount={paginationData && paginationData.pages}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={4}
-            onPageChange={onPageChangeHandler}
-            previousLabel={<PrevButton><Icon icon='arrow-right' /></PrevButton>}
-            nextLabel={<NextButton><Icon icon='arrow-right' /></NextButton>}
-            breakLabel={'•••'}
-            breakClassName={'break'}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            activeClassName={'active'} />
         </>
       ) : (
         <Loading>
           <Icon
-            size='100%'
+            size='138px'
             animationFill={[
-              '#00407C',
-              '#0364BF',
-              '#0364BF',
-              '#4BA7FC'
+              '#2F2F2F',
+              '#DC3545',
+              '#CC4D4D',
+              '#FF6B6B'
             ]}
-            icon='loading-one' />
+            icon='loading-blocks' />
         </Loading>
       )}
       <Container ref={myContainer}>

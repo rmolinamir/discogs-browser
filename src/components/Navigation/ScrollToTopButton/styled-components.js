@@ -10,17 +10,18 @@ export const Button = styled.button`
   height: 40px;
   padding: 0;
   border-radius: 35%;
-  color: #2F2F2F;
+  color: #484848;
   background-color: rgba(255, 255, 255, 0.5);
   background-image: none;
-  border: 2px solid currentColor;
+  border: 2px solid #484848;
   transition: all 200ms ease-out;
   opacity: ${props => props.isInvisible ? 0 : 1};
   outline: 0;
 
   :active {
-    color: #FFF;
-    background-color: #2F2F2F;
+    color: #DC3545;
+    background-color: #484848;
+    border-color: #DC3545;
   }
 `
 export const Arrow = styled.div`
