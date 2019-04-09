@@ -1,45 +1,48 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { toast } from 'react-toastify'
 
 /**
  * Handles 429 errors.
  */
 export const withErrorHandler = (WrappedComponent, axios) => {
-  return class extends Component {
-    state = {
-      error: null
-    }
+  return (props) => {
+    const [error, setError] = React.useState(null)
+    const [interceptors, setInterceptors] = React.useState({})
 
-    componentDidMount () {
-      this.reqInterceptor = axios.interceptors.request.use(req => {
-        this.setState({
-          error: null
+    /**
+     * Handles interceptors when mounting.
+     * Ejects interceptors when unmounting.
+     */
+    React.useEffect(() => {
+      setInterceptors({
+        reqInterceptor: axios.interceptors.request.use(req => {
+          setError(null)
+          return req
+        }),
+        resInterceptor: axios.interceptors.response.use(res => res, error => {
+          setError(error)
+          toast.error('Too many requests in a short amount of time! Please wait for a bit before trying again.', {
+            onClose: () => setError(null) // Callback when the toast closes.
+          })
+          return error
         })
-        return req
       })
-      this.resInterceptor = axios.interceptors.response.use(res => res, error => {
-        toast.error('Too many requests in a short amount of time! Please wait for a bit before trying again.')
-        this.setState({
-          error: error
-        })
-      })
-    }
+      // Return clause when unmounting.
+      return () => {
+        axios.interceptors.request.eject(interceptors.reqInterceptor)
+        axios.interceptors.response.eject(interceptors.resInterceptor)
+      }
+    }, [])
 
-    componentWillUnmount () {
-      axios.interceptors.request.eject(this.reqInterceptor)
-      axios.interceptors.response.eject(this.resInterceptor)
-    }
+    /**
+     * Logs errors to the console.
+     */
+    React.useEffect(() => {
+      if (error) console.error(error)
+    }, [error])
 
-    errorConfirmedHandler = () => {
-      this.setState({
-        error: null
-      })
-    }
-
-    render () {
-      return (
-        <WrappedComponent {...this.props} />
-      )
-    }
+    return (
+      <WrappedComponent {...props} />
+    )
   }
 }
