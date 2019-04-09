@@ -1,4 +1,4 @@
-# Usage
+# Install
 
 In bash CLI:
 
@@ -11,6 +11,6 @@ Afterwards, run the following commands in the root folder to run this project lo
 
 # Optimized Build hosted on Firebase
 
-For an optimized build of this demo app, visit the following link to see the app hosted on Firebase:
+For an optimized build of this app, visit the following link to see the app hosted on Firebase:
 
 https://b4b-discogs.firebaseapp.com/
