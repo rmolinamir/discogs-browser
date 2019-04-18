@@ -12,6 +12,6 @@ export function * watchSearches () {
 
 export function * watchCollection () {
   yield all([
-    takeEvery(actionTypes.COLLECTION_INIT_SET_COLLECTION, collectionSagas.setCollection),
+    takeEvery(actionTypes.COLLECTION_INIT_SET_COLLECTION, collectionSagas.setCollection)
   ])
 }

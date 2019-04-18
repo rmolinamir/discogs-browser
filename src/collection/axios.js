@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { discogsRequestToken, username, resultsPerPage } from '../shared/discogsParams'
 
-export const allId = 1 // 'All folder'
+export const allId = 0 // 'All folder'
 export const uncategorizedId = 1 // 'Uncategorized folder'
 
 const instance = axios.create({
